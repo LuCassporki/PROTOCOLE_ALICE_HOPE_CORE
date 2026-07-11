@@ -44,7 +44,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
     box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3), 0 0 30px rgba(0, 240, 255, 0.2);
-    animation: hopeMorphing 6s infinite ease-in-out alternate, hopeRotation 25s infinite linear;
+    animation: hopeMorphing 6s infinite ease-in-out alternate, hopeRotation 25s infinite linear ;
     transition: background 0.5s ease, box-shadow 0.5s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex; align-items: center; justify-content: center; gap: 5px; 
     overflow: hidden; /* Découpe l'avatar sur les formes mouvantes */
@@ -57,7 +57,8 @@ body {
     background-size: cover; background-position: center;
     opacity: 0.25;
     mix-blend-mode: screen; /* Fusion des pixels clairs avec le plasma néon */
-    animation: hopeRotation 25s infinite linear reverse; /* Annule la rotation pour garder le visage droit */
+    /* Annule la rotation pour garder le visage droit */
+    animation: hopeRotation 25s infinite linear reverse; 
     transition: opacity 0.4s ease, filter 0.4s ease;
 }
 
@@ -97,7 +98,8 @@ body {
     transform: scale(1.08);
 }
 .state-listening .hope-ring-bracket { border-color: var(--hdo-pink); opacity: 0.7; transform: scale(1.05); }
-.state-listening .hope-visual-avatar { opacity: 0.75; }
+.state-listening .hope-visual-avatar { opacity: 0.75;
+ }
 
 /* 2. Analyse / Réflexion (Or Cyber) */
 .state-thinking .hope-core-essence {

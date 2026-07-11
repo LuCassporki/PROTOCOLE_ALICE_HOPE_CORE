@@ -13,10 +13,10 @@
         let currentMode = "idle";
 
         const autonomousQuotes = [
-            "[hope] : Diagnostic autonome effectué. Tout est nominal, Alexander.",
-            "[hope] : Les flux d'énergie de la matrice HDO sont stables.",
-            "[hope] : Système en veille active. J'attends tes instructions.",
-            "[hope] : Liaison synaptique stable. Capsule parée à l'exécution."
+            "[HOPE] : Diagnostic autonome effectué. Tout est nominal, Alexander.",
+            "[HOPE] : Les flux d'énergie de la matrice HDO sont stables.",
+            "[HOPE] : Système en veille active. J'attends tes instructions.",
+            "[HOPE] : Liaison synaptique stable. Capsule parée à l'exécution."
         ];
 
         function sethopeState(mode) {
@@ -59,7 +59,7 @@
             
             if (isOpen) {
                 sethopeState("listening");
-                outputText.textContent = "[hope] : Écoute active en ligne. J'analyse tes requêtes, Alexander.";
+                outputText.textContent = "[HOPE] : Écoute active en ligne. J'analyse tes requêtes, MAJOR.";
             } else {
                 sethopeState("idle");
                 userInput.value = "";
@@ -78,7 +78,7 @@
 
             setTimeout(() => {
                 sethopeState("speaking");
-                outputText.textContent = `[hope] : Commande "${cmd}" compilée. Le protocole répond parfaitement.`;
+                outputText.textContent = `[HOPE] : Commande "${cmd}" compilée. Le protocole répond parfaitement.`;
 
                 setTimeout(() => {
                     if (terminal.classList.contains('open')) {
