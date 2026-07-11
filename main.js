@@ -21,6 +21,29 @@ function createHopWindow() {
     // Ainsi, chaque mise à jour poussée sur Git se reflète instantanément à l'ouverture de l'app PC !
     win.loadURL('https://lucassporki.github.io/PROTOCOLE_ALICE_HOPE_CORE/');
 
+    // Dans ton fichier main.js, juste après win.loadURL(...) :
+
+win.webContents.on('dom-ready', () => {
+    // On envoie une commande à Electron à chaque fois que la souris bouge
+    win.webContents.executeJavaScript(`
+        window.addEventListener('mousemove', (event) => {
+            // Si la souris survole du vide (pas de bulle, pas de terminal ouvert)
+            if (event.target === document.documentElement || event.target.id === 'hop-grid-anchor') {
+                // On dit à Electron d'ignorer le clic (transpercer la fenêtre)
+                window.electronAPI.setIgnore(true);
+            } else {
+                // On capture le clic car on survole un élément de Hop
+                window.electronAPI.setIgnore(false);
+            }
+        });
+    `);
+});
+
+// Pour faire la liaison, expose cette API dans ton main.js via IPC :
+const { ipcMain } = require('electron');
+// (Il faudra configurer un preload script pour un projet de prod, 
+// mais pour ta R&D immédiate tu peux utiliser win.setIgnoreMouseEvents directement selon tes préférences)
+
     // Optionnel : Éviter que la fenêtre sorte de l'écran lors du drag
     win.on('focus', () => {
         win.setAlwaysOnTop(true, 'screen-saver');

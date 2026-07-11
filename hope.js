@@ -12,6 +12,11 @@
         let lastInteractionTime = Date.now();
         let currentMode = "idle";
 
+        // VARIABLES POUR LE DRAG SMART SANS INTERCEPTION
+let isMouseDown = false;
+let startTime = 0;
+let startX, startY;
+
         const autonomousQuotes = [
             "[HOPE] : Diagnostic autonome effectué. Tout est nominal, Alexander.",
             "[HOPE] : Les flux d'énergie de la matrice HDO sont stables.",
@@ -53,18 +58,62 @@
             }
         }
 
-        bubble.addEventListener('click', () => {
-            const isOpen = terminal.classList.toggle('open');
-            lastInteractionTime = Date.now();
-            
-            if (isOpen) {
-                sethopeState("listening");
-                outputText.textContent = "[HOPE] : Écoute active en ligne. J'analyse tes requêtes, MAJOR.";
-            } else {
-                sethopeState("idle");
-                userInput.value = "";
-            }
-        });
+// =======================================================================
+// GESTIONNAIRE D'ÉVÉNEMENTS SMART : CLIC VS GLISSER (DRAG)
+// =======================================================================
+
+// 1. Détection de la pression initiale sur le noyau
+bubble.addEventListener('mousedown', (e) => {
+    isMouseDown = true;
+    startTime = Date.now();
+    startX = e.screenX;
+    startY = e.screenY;
+});
+
+// 2. Gestion du déplacement de la fenêtre si le clic reste maintenu
+window.addEventListener('mousemove', (e) => {
+    if (!isMouseDown) return;
+    
+    const deltaX = e.screenX - startX;
+    const deltaY = e.screenY - startY;
+    
+    startX = e.screenX;
+    startY = e.screenY;
+    
+    // Commande native d'Electron pour bouger la fenêtre en douceur
+    window.moveBy(deltaX, deltaY); 
+});
+
+// 3. Analyse au relâchement du doigt/souris
+window.addEventListener('mouseup', (e) => {
+    if (!isMouseDown) return;
+    isMouseDown = false;
+    
+    const clickDuration = Date.now() - startTime;
+    
+    // Si la pression a duré moins de 200ms, c'est l'intention d'un clic d'interaction
+    if (clickDuration < 200) {
+        triggerInteractionHop();
+    }
+});
+
+// Fonction d'ouverture/fermeture du terminal HDO
+function triggerInteractionHop() {
+    const isOpen = terminal.classList.toggle('open');
+    lastInteractionTime = Date.now();
+    
+    if (isOpen) {
+        sethopeState("listening");
+        outputText.textContent = "[HOPE] : Écoute active en ligne. J'analyse tes requêtes, MAJOR.";
+    } else {
+        sethopeState("idle");
+        userInput.value = "";
+    }
+}
+
+        // =======================================================================
+// ENVOI ET TRAITEMENT DES LOGIQUES DE DIALOGUE
+// =======================================================================
 
         function triggerhopeResponse() {
             const cmd = userInput.value.trim();
