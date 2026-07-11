@@ -2,7 +2,7 @@
         const essence = document.getElementById('hope-essence');
         const bubble = document.getElementById('hope-bubble');
         const terminal = document.getElementById('hope-terminal');
-        const stateText = document.getElementById('hope-state-text');
+        // const stateText = document.getElementById('hope-state-text');
         const titleText = document.getElementById('sys-title');
         const outputText = document.getElementById('hope-output-text');
         const userInput = document.getElementById('user-input');
@@ -25,29 +25,29 @@
             essence.classList.remove('speaking');
 
             if (mode === "idle") {
-                stateText.textContent = "SYSTEM // IDLE";
-                stateText.style.color = "#00f0ff";
+                // stateText.textContent = "SYSTEM // IDLE";
+                // stateText.style.color = "#00f0ff";
                 titleText.style.color = "#00f0ff";
                 netTag.textContent = "STABLE"; netTag.style.color = "#00f0ff";
             } 
             else if (mode === "listening") {
                 anchor.classList.add('state-listening');
-                stateText.textContent = "CORE // LISTENING";
-                stateText.style.color = "#ff007f";
+                // stateText.textContent = "CORE // LISTENING";
+                // stateText.style.color = "#ff007f";
                 titleText.style.color = "#ff007f";
             } 
             else if (mode === "thinking") {
                 anchor.classList.add('state-thinking');
-                stateText.textContent = "MATRIX // COMPILING";
-                stateText.style.color = "#ffea00";
+                // stateText.textContent = "MATRIX // COMPILING";
+                // stateText.style.color = "#ffea00";
                 titleText.style.color = "#ffea00";
                 netTag.textContent = "PROCESSING"; netTag.style.color = "#ffea00";
             } 
             else if (mode === "speaking") {
                 anchor.classList.add('state-speaking');
                 essence.classList.add('speaking');
-                stateText.textContent = "VOICE // TRANSMITTING";
-                stateText.style.color = "#00bf33";
+                // stateText.textContent = "VOICE // TRANSMITTING";
+                // stateText.style.color = "#00bf33";
                 titleText.style.color = "#00bf33";
                 netTag.textContent = "LIVE"; netTag.style.color = "#00bf33";
             }

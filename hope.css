@@ -25,9 +25,9 @@ body {
 }
 
 /* --- MONITEURS DE STATUT --- */
-.hope-status-header { position: absolute; top: 40px; text-align: center; font-family: monospace; }
+/* .hope-status-header { position: absolute; top: 40px; text-align: center; font-family: monospace; }
 .sys-title { font-size: 0.7rem; color: var(--hdo-cyan); letter-spacing: 4px; text-transform: uppercase; transition: color 0.4s ease; }
-.sys-state { font-size: 1.1rem; letter-spacing: 2px; margin-top: 5px; font-weight: bold; transition: color 0.4s ease; }
+.sys-state { font-size: 1.1rem; letter-spacing: 2px; margin-top: 5px; font-weight: bold; transition: color 0.4s ease; } */
 
 /* =======================================================================
    LA BULLE INTERACTIVE (NUCLEUS ESSENCE)
@@ -165,7 +165,3 @@ body {
 
 @keyframes hopeRotation { 100% { transform: rotate(360deg); } }
 
-.instruction-tap {
-    position: absolute; bottom: 40px; font-family: monospace; font-size: 0.65rem;
-    color: rgba(255,255,255,0.2); letter-spacing: 2px; text-transform: uppercase;
-}
