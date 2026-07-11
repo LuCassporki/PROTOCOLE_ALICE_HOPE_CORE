@@ -1,0 +1,25 @@
+{
+  "name": "hope",
+  "version": "1.0.0",
+  "description": "PROTOCOLE_ALICE_HOPE_CORE",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+    
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuCassporki/PROTOCOLE_ALICE_HOPE_CORE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/LuCassporki/PROTOCOLE_ALICE_HOPE_CORE/issues"
+  },
+  "homepage": "https://github.com/LuCassporki/PROTOCOLE_ALICE_HOPE_CORE#readme",
+  "devDependencies": {
+    "electron": "^43.1.0"
+  }
+}
