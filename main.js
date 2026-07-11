@@ -19,7 +19,7 @@ function createHopWindow() {
     // ARCHITECTURE STABLE D'ACTUALISATION SYNCHRONE :
     // Au lieu de charger le fichier local, on charge ton lien de déploiement GitHub Pages direct.
     // Ainsi, chaque mise à jour poussée sur Git se reflète instantanément à l'ouverture de l'app PC !
-    win.loadURL('https://lucas-momot.github.io/hop-core/');
+    win.loadURL('https://lucassporki.github.io/PROTOCOLE_ALICE_HOPE_CORE/');
 
     // Optionnel : Éviter que la fenêtre sorte de l'écran lors du drag
     win.on('focus', () => {
