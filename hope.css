@@ -59,13 +59,14 @@ body {
 /* =======================================================================
    L'AVATAR INTERNE HOLOGRAPHIQUE
    ======================================================================= */
-
+.none{display: none;}
 
 /* --- LE SYSTÈME DE FRÉQUENCE (AUDIO SPECTRUM BARRES) --- */
 .audio-bar {
     width: 3px; height: 16px; background: rgba(255, 255, 255, 0.85);
     border-radius: 2px; transform: scaleY(0.1); z-index: 2;
     transition: transform 0.3s ease, background 0.3s;
+    display: none !important;
 }
 
 /* Activation des pulsations audio uniquement quand hope parle */
@@ -75,11 +76,6 @@ body {
 .hope-core-essence.speaking .audio-bar:nth-child(3) { animation-delay: 0.0s; }
 .hope-core-essence.speaking .audio-bar:nth-child(4) { animation-delay: 0.4s; }
 
-.hope-core-essence.speaking2 .audio-bar { animation: hdoAudioPulse2 1s infinite alternate ease-in-out; }
-.hope-core-essence.speaking2 .audio-bar:nth-child(1) { animation-delay: 0.2s; }
-.hope-core-essence.speaking2 .audio-bar:nth-child(2) { animation-delay: 0.6s; }
-.hope-core-essence.speaking2 .audio-bar:nth-child(3) { animation-delay: 0.1s; }
-.hope-core-essence.speaking2 .audio-bar:nth-child(4) { animation-delay: 0.8s; }
 
 
 @keyframes hdoAudioPulse {
@@ -130,6 +126,11 @@ body {
     background: linear-gradient(135deg, var(--hdo-green) 0%, #00220a) !important;
     box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 35px var(--hdo-green);
     animation: hopeMorphing 1s infinite ease-in-out alternate;
+}
+/* 2. ÉTAT PAROLE (Speaking) : Les barres réapparaissent et s'animent instantanément */
+.state-speaking .audio-bar { 
+    display: inline-block !important; /* Rend les barres visibles */
+    animation: hdoAudioPulse 0.4s infinite alternate ease-in-out; 
 }
 
 /* En transmission de voix, l'image reste figée stable tandis que la bulle vibre autour */

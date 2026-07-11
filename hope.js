@@ -9,6 +9,7 @@ const outputText = document.getElementById('hope-output-text');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 const netTag = document.getElementById('network-tag');
+const audio = document.getElementById('audio');
 
 let lastInteractionTime = Date.now();
 let currentMode = "idle";
@@ -70,7 +71,7 @@ function startIdleGallery() {
     idleInterval = setInterval(() => {
         currentIdleIndex = (currentIdleIndex + 1) % idleImages.length;
         changeAvatarImage(idleImages[currentIdleIndex]);
-    }, 4000);
+    }, 1000);
 }
 
 // Arrête la galerie pour figer l'image d'interaction
@@ -89,7 +90,7 @@ function sethopeState(mode) {
 
     if (mode === "idle") {
         netTag.textContent = "STABLE"; netTag.style.color = "#00f0ff";
-        
+        audio.classList.add('none');
         startIdleGallery();
     } 
     else {
@@ -193,7 +194,7 @@ userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') triggerho
 // Cycle autonome d'inactivité (Ping Émotionnel calibré à 15s)
 setInterval(() => {
     const timeSinceLastAction = Date.now() - lastInteractionTime;
-    if (timeSinceLastAction > 15000 && currentMode === "idle") {
+    if (timeSinceLastAction > 35000 && currentMode === "idle") {
         lastInteractionTime = Date.now();
         sethopeState("speaking");
         const randomQuote = autonomousQuotes[Math.floor(Math.random() * autonomousQuotes.length)];
