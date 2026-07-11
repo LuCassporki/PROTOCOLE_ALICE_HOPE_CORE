@@ -1,0 +1,168 @@
+/* =======================================================================
+   CHARTE DE DESIGN & MATRICE CHROMATIQUE HDO
+   ======================================================================= */
+
+
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    user-select: none; -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--hdo-bg);
+    background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #ffffff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.hud-matrix-layer {
+    position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+
+/* --- MONITEURS DE STATUT --- */
+.hope-status-header { position: absolute; top: 40px; text-align: center; font-family: monospace; }
+.sys-title { font-size: 0.7rem; color: var(--hdo-cyan); letter-spacing: 4px; text-transform: uppercase; transition: color 0.4s ease; }
+.sys-state { font-size: 1.1rem; letter-spacing: 2px; margin-top: 5px; font-weight: bold; transition: color 0.4s ease; }
+
+/* =======================================================================
+   LA BULLE INTERACTIVE (NUCLEUS ESSENCE)
+   ======================================================================= */
+.hope-bubble-container {
+    position: relative; width: 170px; height: 170px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;
+}
+
+.hope-core-essence {
+    position: absolute; width: 120px; height: 120px;
+    background: linear-gradient(135deg, var(--hdo-cyan) 0%, var(--hdo-purple) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3), 0 0 30px rgba(0, 240, 255, 0.2);
+    animation: hopeMorphing 6s infinite ease-in-out alternate, hopeRotation 25s infinite linear;
+    transition: background 0.5s ease, box-shadow 0.5s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex; align-items: center; justify-content: center; gap: 5px; 
+    overflow: hidden; /* Découpe l'avatar sur les formes mouvantes */
+}
+
+/* INTÉGRATION HOLOGRAPHIQUE DU VISUEL DE hope */
+.hope-visual-avatar {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('media/hope/4-hope.png'); /* Ton fichier image PNG ira ici */
+    background-size: cover; background-position: center;
+    opacity: 0.25;
+    mix-blend-mode: screen; /* Fusion des pixels clairs avec le plasma néon */
+    animation: hopeRotation 25s infinite linear reverse; /* Annule la rotation pour garder le visage droit */
+    transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+/* --- LE SYSTÈME DE FRÉQUENCE (AUDIO SPECTRUM BARRES) --- */
+.audio-bar {
+    width: 3px; height: 16px; background: rgba(255, 255, 255, 0.85);
+    border-radius: 2px; transform: scaleY(0.1); z-index: 2;
+    transition: transform 0.3s ease, background 0.3s;
+}
+
+/* Activation des pulsations audio uniquement quand hope parle */
+.hope-core-essence.speaking .audio-bar { animation: hdoAudioPulse 0.4s infinite alternate ease-in-out; }
+.hope-core-essence.speaking .audio-bar:nth-child(1) { animation-delay: 0.1s; }
+.hope-core-essence.speaking .audio-bar:nth-child(2) { animation-delay: 0.3s; }
+.hope-core-essence.speaking .audio-bar:nth-child(3) { animation-delay: 0.0s; }
+.hope-core-essence.speaking .audio-bar:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes hdoAudioPulse {
+    0% { transform: scaleY(0.2); }
+    100% { transform: scaleY(2.6); }
+}
+
+/* Anneau de ciblage externe */
+.hope-ring-bracket {
+    position: absolute; width: 160px; height: 160px;
+    border: 1px dashed var(--hdo-cyan); border-radius: 50%; opacity: 0.3;
+    animation: hopeRotation 10s infinite linear reverse; transition: all 0.5s ease;
+}
+
+/* =======================================================================
+   MUTATIONS SPATIALES DU CODE COULEUR (SIGNATURE DES ÉTATS)
+   ======================================================================= */
+/* 1. Écoute Active (Rose Flash) */
+.state-listening .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-pink) 0%, #300060) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 40px var(--hdo-pink);
+    transform: scale(1.08);
+}
+.state-listening .hope-ring-bracket { border-color: var(--hdo-pink); opacity: 0.7; transform: scale(1.05); }
+.state-listening .hope-visual-avatar { opacity: 0.75; }
+
+/* 2. Analyse / Réflexion (Or Cyber) */
+.state-thinking .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-gold) 0%, #440099) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 45px var(--hdo-gold);
+    animation: hopeMorphing 1.5s infinite ease-in-out alternate, hopeRotation 6s infinite linear;
+}
+.state-thinking .hope-ring-bracket { border-color: var(--hdo-gold); opacity: 0.8; animation-duration: 3s; }
+.state-thinking .hope-visual-avatar { opacity: 0.85; filter: drop-shadow(0 0 5px var(--hdo-gold)); }
+
+/* 3. Parole active (Vert Major) */
+.state-speaking .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-green) 0%, #00220a) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 35px var(--hdo-green);
+}
+.state-speaking .hope-ring-bracket { border-color: var(--hdo-green); opacity: 0.5; }
+.state-speaking .hope-visual-avatar { opacity: 0.8; }
+
+/* =======================================================================
+   CONSOLE OVERLAY (PANNEAU COCKPIT)
+   ======================================================================= */
+.hope-terminal-overlay {
+    position: absolute; bottom: -300px; width: 90%; max-width: 400px;
+    background: var(--hdo-panel); border: 1px solid rgba(0, 240, 255, 0.12);
+    border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 15px;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.95); backdrop-filter: blur(12px);
+    transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1); z-index: 5;
+}
+
+.hope-terminal-overlay.open { transform: translateY(-340px); }
+
+.terminal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: monospace; font-size: 0.65rem; color: rgba(255,255,255,0.4);
+    border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;
+}
+
+.terminal-output { font-size: 0.85rem; line-height: 1.4; color: rgba(255,255,255,0.9); min-height: 60px; font-family: monospace; }
+.terminal-input-row { display: flex; gap: 10px; width: 100%; }
+
+.terminal-input-row input {
+    flex: 1; background: #000; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 10px 15px; color: #fff; font-size: 0.85rem;
+    outline: none; font-family: monospace;
+}
+.terminal-input-row input:focus { border-color: var(--hdo-cyan); }
+
+.terminal-send-btn {
+    background: transparent; border: 1px solid var(--hdo-cyan); color: var(--hdo-cyan);
+    border-radius: 8px; padding: 0 15px; font-family: monospace; font-size: 0.75rem;
+    cursor: pointer; font-weight: bold; text-transform: uppercase;
+}
+
+/* =======================================================================
+     MOTEURS GEOMETRIQUES (MIGRATION DES MESH)
+   ======================================================================= */
+@keyframes hopeMorphing {
+    0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
+    50% { border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%; }
+    100% { border-radius: 50% 50% 65% 35% / 40% 55% 45% 60%; }
+}
+
+@keyframes hopeRotation { 100% { transform: rotate(360deg); } }
+
+.instruction-tap {
+    position: absolute; bottom: 40px; font-family: monospace; font-size: 0.65rem;
+    color: rgba(255,255,255,0.2); letter-spacing: 2px; text-transform: uppercase;
+}

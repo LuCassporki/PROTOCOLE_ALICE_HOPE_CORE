@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HDO - hope Core Core v0.2</title>
+    <!-- Liaison vers ta physique de style externe -->
+    <link rel="stylesheet" href="style_hope.css">
+    <link rel="stylesheet" href="root.css">
+</head>
+<body>
+
+    <div class="hud-matrix-layer" id="hope-grid-anchor">
+
+        <!-- Statut Système Tactique -->
+        <div class="hope-status-header">
+            <div class="sys-title" id="sys-title">HDO AI Protocol // Sync</div>
+            <div class="sys-state" id="hope-state-text">SYSTEM // IDLE</div>
+        </div>
+
+        <!-- Le Noyau Sensoriel (La Bulle hope) -->
+        <div class="hope-bubble-container" id="hope-bubble">
+            <div class="hope-ring-bracket"></div>
+            <div class="hope-core-essence" id="hope-essence">
+                
+                <!-- Calque Avatar Holographique Interne -->
+                <div class="hope-visual-avatar"></div>
+
+                <!-- Fréquences Égaliseurs Audio -->
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+            </div>
+        </div>
+
+        <!-- Console de Dialogue Rétroéclairée -->
+        <div class="hope-terminal-overlay" id="hope-terminal">
+            <div class="terminal-header">
+                <span>CORE_VERSION // V0.2_MODULAR</span>
+                <span id="network-tag">STABLE</span>
+            </div>
+            <div class="terminal-output" id="hope-output-text">
+                [hope] : Initialisation modulaire réussie, Alexander. Les fichiers HTML et CSS sont séparés. Liaison neuronale prête.
+            </div>
+            <div class="terminal-input-row">
+                <input type="text" id="user-input" placeholder="Injecter une commande..." autocomplete="off">
+                <button class="terminal-send-btn" id="send-btn">Send</button>
+            </div>
+        </div>
+
+        <div class="instruction-tap">Taper le noyau pour déployer hope</div>
+
+    </div>
+    <script src="hope.js"></script>
+
+</html>
