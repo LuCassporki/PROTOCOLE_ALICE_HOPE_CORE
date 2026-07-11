@@ -10,8 +10,10 @@
 }
 
 body {
-    background-color: transparent !important; /* OBLIGATOIRE pour l'effet holographique */
-    background-image: none; /* On enlève le fond quadrillé pour le mode transparent */
+    background-color: transparent !important; /*OBLIGATOIRE pour l'effet holographique */
+     background-image: none; /*On enlève le fond quadrillé pour le mode transparent*/
+    /* background-color: #000; */
+    width: 100vw; height: 100vh;
     color: #ffffff;
     font-family: 'Segoe UI', Arial, sans-serif;
     /* height: 100vh; */
@@ -26,16 +28,30 @@ body {
    
     display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
-
+.encre{width: 200px; height: 200px;
+    border: solid  rgb(255, 255, 255) .5px;
+    border-radius: 50% 50%;
+    position: absolute; top: 50%; left: 50%; translate: -50% -50%;
+     box-shadow: inset 0 0 30px rgb(20, 0, 26), 0 0 10px rgb(0, 0, 0);
+       -webkit-app-region: drag !important;
+    cursor: move;
+}
 
 /* =======================================================================
    LA BULLE INTERACTIVE (NUCLEUS ESSENCE)
    ======================================================================= */
+   /* Force le noyau à repasser au tout premier plan tactile */
+#hope-bubble {
+    z-index: 9999 !important;
+    cursor: pointer;
+}
+
 .hope-bubble-container {
     position: relative; width: 170px; height: 170px;
     display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;
     /* LA SOLUTION PC : Permet de cliquer sur la bulle et de déplacer toute la fenêtre sur ton bureau */
-    -webkit-app-region: drag;
+    /* -webkit-app-region: drag; */
+    -webkit-app-region: no-drag !important;
 }
 
 /* =======================================================================
