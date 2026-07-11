@@ -10,9 +10,8 @@
 }
 
 body {
-    background-color: var(--hdo-bg);
-    background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 20px 20px;
+    background-color: transparent !important; /* OBLIGATOIRE pour l'effet holographique */
+    background-image: none; /* On enlève le fond quadrillé pour le mode transparent */
     color: #ffffff;
     font-family: 'Segoe UI', Arial, sans-serif;
     height: 100vh;
@@ -36,6 +35,8 @@ body {
 .hope-bubble-container {
     position: relative; width: 170px; height: 170px;
     display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;
+    /* LA SOLUTION PC : Permet de cliquer sur la bulle et de déplacer toute la fenêtre sur ton bureau */
+    -webkit-app-region: drag;
 }
 
 .hope-core-essence {
