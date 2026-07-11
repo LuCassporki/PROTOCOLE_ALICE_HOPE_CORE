@@ -13,12 +13,13 @@ body {
     background-color: transparent !important; /*OBLIGATOIRE pour l'effet holographique */
      background-image: none; /*On enlève le fond quadrillé pour le mode transparent*/
     /* background-color: #000; */
-    width: 100vw; height: 100vh;
+    width: auto; height: auto;
     color: #ffffff;
     font-family: 'Segoe UI', Arial, sans-serif;
     /* height: 100vh; */
     overflow: hidden;
     position: relative;
+    border: solid  rgb(243, 28, 0) .5px;
 }
 
 .hud-matrix-layer {

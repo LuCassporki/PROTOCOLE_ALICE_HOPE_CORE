@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HDO - hope Core Core v0.2</title>
+    <!-- Liaison vers ta physique de style externe -->
+    <link rel="stylesheet" href="hope.css">
+    <link rel="stylesheet" href="root.css">
+    <link rel="stylesheet" href="rings.css">
+    <link rel="stylesheet" href="face.css">
+</head>
+<body>
+    <div class="hud-matrix-layer" id="hope-grid-anchor">
+        <div class="encre"></div>
+
+        <!-- Le Noyau Sensoriel (La Bulle hope) -->
+        <div class="hope-bubble-container" id="hope-bubble">
+            <div class="hope-ring1"></div>
+            <div class="hope-ring2"></div>
+            <div class="hope-ring3"></div>
+            <div class="hope-ring4"></div>
+            <div class="hope-core-essence" id="hope-essence">
+                
+                <!-- Calque Avatar Holographique Interne -->
+               <div id="hope-visual-avatar" class="hope-visual-avatar"></div>
+
+                <!-- Fréquences Égaliseurs Audio -->
+                <div id="audio" class="audio-bar"></div>
+                <div id="audio" class="audio-bar"></div>
+                <div id="audio" class="audio-bar"></div>
+                <div id="audio" class="audio-bar"></div>
+            </div>
+        </div>
+
+        <!-- Console de Dialogue Rétroéclairée -->
+        <div class="hope-terminal-overlay" id="hope-terminal">
+            <div class="terminal-header">
+                <span>A.L.I.C.E // sun_24.1.9</span>
+                <span id="network-tag">STABLE</span>
+            </div>
+            <div class="terminal-output" id="hope-output-text">
+                [HOPE] : Initialisation modulaire réussie, Alexander. Les fichiers HTML et CSS sont séparés. Liaison neuronale prête.
+            </div>
+            <div class="terminal-input-row">
+                <input type="text" id="user-input" placeholder="Injecter une commande..." autocomplete="off">
+                <button class="terminal-send-btn" id="send-btn">Send</button>
+            </div>
+        </div>
+
+
+    </div>
+    <script src="hope.js"></script>
+
+</html>
