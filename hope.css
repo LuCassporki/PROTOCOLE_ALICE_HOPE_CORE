@@ -206,17 +206,17 @@ body {
     /* Tes styles existants pour le terminal ouvert/fermé */
 }
 .hope-terminal-overlay {
-    position: absolute; top: 0%; left: 50%; translate: -50% 0%;
-    background: var(--hdo-alice); border: 1px solid var(--hdo-gold);
-    border-radius: 30px; padding: 10px; display: flex; flex-direction: column; gap: 5px;
+    position: absolute;top: 80%; left: 50%; translate: -50% -50%;
+    background: var(--hdo-alice); border: 1px solid var(--hdo-gold); 
+    border-radius: 20px 100px 20px 20px; padding: 5px; display: flex; flex-direction: column; gap: px;
     box-shadow: 0 -10px 40px rgba(0,0,0,0.95); backdrop-filter: blur(12px);
     transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1); z-index: 5;
     pointer-events: none;
     opacity: 0;
 }
 
-.hope-terminal-overlay.open { transform: translateY(85%); pointer-events: auto; 
-min-width: 200px; max-width: 350px; opacity: .8;
+.hope-terminal-overlay.open { pointer-events: auto; 
+width: 380px; opacity: .65;
 }
 
 .terminal-header {
@@ -278,4 +278,60 @@ scale: .8;
 #hope-output-text {
     /* Indique au HTML de respecter scrupuleusement les \n du JSON ! */
     white-space: pre-line; 
+}
+
+/* =================== */
+/* grille hub */
+/* =================== */
+.flower{position: absolute; translate: -50% -50%; top: 50%; left: 50%;
+    background:transparent; width: 300px; height: 300px;
+}
+.hub-grid,
+.hub-grid2,
+.hub-grid3,
+.hub-grid4 {
+position: absolute;
+ opacity: .8;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colonnes égales */
+    grid-gap: 5px;
+    background: rgba(191, 112, 255, 0);
+    border: 1px solid var(--hdo-gold);
+    /* pointer-events: none; */
+}
+.hub-grid {top: 0%; left: 0%;
+    border-radius:  50px 200px 50px 200px;
+}
+.hub-grid2 {bottom: 0%; left: 0%;
+    border-radius: 200px 50px 200px 50px;
+}
+.hub-grid3 {top: 0%; right: 0%;
+    border-radius: 200px 50px 200px 50px;
+}
+.hub-grid4 {bottom: 0%; right: 0%;
+    border-radius:  50px 200px 50px 200px;
+}
+
+.hub-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 55px;
+    width: 55px;
+    background: rgba(132, 0, 255, 0.329);
+    border: 1px solid rgb(215, 94, 252);
+    color: #f6fa00;
+    font-family: monospace;
+    font-size: .5rem;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+}
+
+.hub-item:hover {
+    background: rgba(255, 183, 0, 0.3);
+    border-color: var(--hdo-gold, #ffb700);
+    box-shadow: 0 0 8px rgba(255, 183, 0, 0.5);
 }
