@@ -1,0 +1,353 @@
+/* =======================================================================
+   CHARTE DE DESIGN & MATRICE CHROMATIQUE HDO
+   ======================================================================= */
+
+
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    user-select: none; -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    padding: 10px;
+    background-color: transparent !important; /*OBLIGATOIRE pour l'effet holographique */
+    width:99vw; height: 99vh;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    overflow: hidden; /* Évite les barres de défilement Windows affreuses */
+    display: table;   /* Alternative ultra-stable à flex pour Electron */
+    border: solid  rgba(255, 230, 0, 0.466) 3px;
+}
+/* On force les blocs majeurs à s'empiler proprement les uns sous les autres */
+#hope-grid-anchor, #hope-terminal, .flower {
+    display: block;
+    margin-bottom: 12px;
+}
+
+/* Ton ancrage doit être positionné en haut à gauche de la fenêtre Electron */
+/* #hope-grid-anchor {
+    position: absolute;
+    display: flex;
+    flex-direction: column; /* Aligne la bulle en haut et le terminal en dessous */
+    /* align-items: center; */
+/* } */ 
+.hud-matrix-layer {
+    position: absolute; 
+    top: 0; right: 50%;  translate: 50% 10%;
+    /* width: auto; height: auto;  */
+   
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.encre{width: 200px; height: 200px;
+    border: solid  rgb(255, 255, 255) .5px;
+    border-radius: 50% 50%;
+    position: absolute; top: 50%; left: 50%; translate: -50% -50%;
+     box-shadow: inset 0 0 30px rgb(20, 0, 26), 0 0 10px rgb(0, 0, 0);
+       -webkit-app-region: drag !important;
+    cursor: move;
+}
+
+/* =======================================================================
+   LA BULLE INTERACTIVE (NUCLEUS ESSENCE)
+   ======================================================================= */
+   /* Force le noyau à repasser au tout premier plan tactile */
+#hope-bubble {
+    z-index: 9999 !important;
+    cursor: pointer;
+}
+
+.hope-bubble-container {
+    position: relative; width: 170px; height: 170px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;
+    /* LA SOLUTION PC : Permet de cliquer sur la bulle et de déplacer toute la fenêtre sur ton bureau */
+    /* -webkit-app-region: drag; */
+    -webkit-app-region: no-drag !important;
+}
+
+/* =======================================================================
+   LE NOYAU CENTRAL (LA BULLE)
+   ======================================================================= */
+.hope-core-essence {
+    position: absolute; width: 120px; height: 120px;
+    background: linear-gradient(135deg, var(--hdo-tunder) 0%, var(--hdo-purple) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3), 0 0 30px rgba(0, 240, 255, 0.2);
+
+    /* La bulle externe tourne TOUJOURS en boucle continue, peu importe l'état */
+    animation: hopeMorphing 3s infinite ease-in-out alternate;
+
+    transition: background 0.5s ease, box-shadow 0.5s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex; align-items: center; justify-content: center; gap: 5px; 
+    overflow: hidden; /* Découpe l'avatar sur les formes mouvantes */
+}
+
+/* =======================================================================
+   L'AVATAR INTERNE HOLOGRAPHIQUE
+   ======================================================================= */
+.none{display: none;}
+
+/* --- LE SYSTÈME DE FRÉQUENCE (AUDIO SPECTRUM BARRES) --- */
+.audio-bar {
+    width: 3px; height: 16px; background: rgba(255, 255, 255, 0.85);
+    border-radius: 2px; transform: scaleY(0.1); z-index: 2;
+    transition: transform 0.3s ease, background 0.3s;
+    display: none !important;
+}
+
+/* Activation des pulsations audio uniquement quand hope parle */
+.hope-core-essence.speaking .audio-bar { animation: hdoAudioPulse 0.4s infinite alternate ease-in-out; }
+.hope-core-essence.speaking .audio-bar:nth-child(1) { animation-delay: 0.1s; }
+.hope-core-essence.speaking .audio-bar:nth-child(2) { animation-delay: 0.3s; }
+.hope-core-essence.speaking .audio-bar:nth-child(3) { animation-delay: 0.0s; }
+.hope-core-essence.speaking .audio-bar:nth-child(4) { animation-delay: 0.4s; }
+
+
+
+@keyframes hdoAudioPulse {
+    0% { transform: scaleY(0.2); }
+    100% { transform: scaleY(2); }
+}
+@keyframes hdoAudioPulse2 {
+    0% { transform: scaleY(0.2); }
+    100% { transform: scaleY(1); }
+}
+
+
+
+
+
+
+
+
+
+
+/* =======================================================================
+   MUTATIONS SPATIALES ET CONTRÔLE DES ANIMATIONS D'ÉTATS
+   ======================================================================= */
+
+/* 1. Écoute Active (Rose Flash) */
+.state-listening .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-pink) 0%, #300060) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 40px var(--hdo-pink);
+    transform: scale(1.08);
+    animation: hopeMorphing 6s infinite ease-in-out alternate;
+}
+
+/* LA CLÉ : Dès qu'on est en écoute, on gèle l'animation de l'avatar et on le remet bien droit */
+
+
+/* 2. Analyse / Réflexion (Or Cyber) */
+.state-thinking .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-gold) 0%, #440099) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 45px var(--hdo-gold);
+    animation: hopeMorphing 2s infinite ease-in-out alternate;
+}
+
+/* En réflexion, l'image reste figée droite pour affirmer la concentration */
+
+
+/* 3. Parole active (Vert Major) */
+.state-speaking .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-green) 0%, #00220a) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 35px var(--hdo-green);
+    animation: hopeMorphing 1s infinite ease-in-out alternate;
+}
+
+/* 2. ÉTAT PAROLE (Speaking) : Les barres réapparaissent et s'animent instantanément */
+.state-speaking .audio-bar { 
+    display: inline-block !important; /* Rend les barres visibles */
+    animation: hdoAudioPulse 0.4s infinite alternate ease-in-out; 
+}
+
+/* 4. Analyse / Réflexion (Or Cyber) */
+.state-panique .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-gold) 0%, #f30000) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 45px var(--hdo-deep);
+    animation: hopeMorphing .5s infinite ease-in-out alternate;
+}
+
+
+
+/* =======================================================================
+   MUTATIONS SPATIALES DU CODE COULEUR (SIGNATURE DES ÉTATS)
+   ======================================================================= */
+/* 1. Écoute Active (Rose Flash) */
+.state-listening .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-pink) 0%, #300060) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 40px var(--hdo-pink);
+    transform: scale(1.08);
+}
+
+
+/* 2. Analyse / Réflexion (Or Cyber) */
+.state-thinking .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-gold) 0%, #440099) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 45px var(--hdo-gold);
+}
+
+
+/* 3. Parole active (Vert Major) */
+.state-speaking .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-green) 0%, #00220a) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 35px var(--hdo-green);
+}
+
+/* 4. panique active (Vert Major) */
+.state-panique .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-blood) 0%, #005704a6) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 35px var(--hdo-deep);
+}
+
+
+/* =======================================================================
+   CONSOLE OVERLAY (PANNEAU COCKPIT)
+   ======================================================================= */
+   #hope-terminal {
+    margin-top: 20px;
+    /* Tes styles existants pour le terminal ouvert/fermé */
+}
+.hope-terminal-overlay {
+    position: absolute;top: 80%; left: 50%; translate: -50% -50%;
+    background: var(--hdo-alice); border: 1px solid var(--hdo-gold); 
+    border-radius: 20px 100px 20px 20px; padding: 5px; display: flex; flex-direction: column; gap: px;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.95); backdrop-filter: blur(12px);
+    transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1); z-index: 5;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.hope-terminal-overlay.open { pointer-events: auto; 
+width: 380px; opacity: .65;
+}
+
+.terminal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: monospace; font-size: 0.65rem; color:var(--hdo-green);
+    border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px;
+}
+
+.terminal-output { font-size: 0.7rem; line-height: 1.4; color:var(--hdo-gold); min-height: 60px; font-family: monospace; }
+.terminal-input-row { display: flex; gap: 5px; width: 100%; }
+
+.terminal-input-row input {
+    flex: 1; background: #000; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 5px 50px 5px 50px; padding: 10px 15px; color:var(--hdo-tunder); font-size: 0.85rem;
+    outline: none; font-family: monospace;
+}
+.terminal-input-row input:focus { border-color: var(--hdo-cyan); }
+
+.terminal-send-btn {
+    background: transparent; border: 1px solid var(--hdo-cyan); color: var(--hdo-cyan);
+    border-radius: 50px 5px 50px 5px; padding: 0 15px; font-family: monospace; font-size: 0.75rem;
+    cursor: pointer;  text-transform: uppercase;
+    transition: all .3s;
+}
+.terminal-send-btn:hover {
+    background: var(--hdo-major); border: 1px solid var(--hdo-gold); color: var(--hdo-gold);
+    border-radius: 5px 50px 5px 50px;
+    font-weight: bold; 
+}
+.terminal-send-btn:active {
+    background: var(--hdo-green); border: 1px solid var(--hdo-gold); color: var(--hdo-gold);
+    border-radius: 5px 50px 5px 50px;
+scale: .8;
+}
+
+/* =======================================================================
+     MOTEURS GEOMETRIQUES (MIGRATION DES MESH)
+   ======================================================================= */
+@keyframes hopeMorphing {
+    0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
+    50% { border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%; }
+    100% { border-radius: 50% 50% 65% 35% / 40% 55% 45% 60%; }
+}
+
+@keyframes hopeRotation { 100% { transform: rotate(360deg); } }
+
+
+
+/* =======================================================================
+    bouton radio
+   ======================================================================= */
+.radio-controls{ display: flex; flex-direction: row; justify-content:space-around; 
+}
+    .radio-btn{ font-size: .65rem; padding: 1px 5px 5px 5px;}
+.btn1{background-color: var(--hdo-major); border-radius: 5px 5px 50px 50px; }
+.btn2{background-color: var(--hdo-deep); border-radius: 50px 50px 5px 5px; color: var(--hdo-alice);}
+.btn3{background-color: var(--hdo-purple); border-radius: 5px 50px 5px 50px; color: var(--hdo-blood);}
+
+#hope-output-text {
+    /* Indique au HTML de respecter scrupuleusement les \n du JSON ! */
+    white-space: pre-line; 
+}
+
+/* =================== */
+/* grille hub */
+/* =================== */
+.flower{
+    /* position: absolute; translate: -50% -50%; top: 50%; left: 50%; */
+    background:transparent; width: 300px; height: 300px;
+}
+.hub-grid,
+.hub-grid2,
+.hub-grid3,
+.hub-grid4 {
+position: absolute;
+ opacity: .8;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colonnes égales */
+    grid-gap: 5px;
+    background: rgba(191, 112, 255, 0);
+    border: 1px solid var(--hdo-gold);
+    /* pointer-events: none; */
+}
+.hub-grid {top: 0%; left: 0%;
+    border-radius:  50px 200px 50px 200px;
+}
+.hub-grid2 {bottom: 0%; left: 0%;
+    border-radius: 200px 50px 200px 50px;
+}
+.hub-grid3 {top: 0%; right: 0%;
+    border-radius: 200px 50px 200px 50px;
+}
+.hub-grid4 {bottom: 0%; right: 0%;
+    border-radius:  50px 200px 50px 200px;
+}
+
+.hub-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 55px;
+    width: 55px;
+    background: rgba(132, 0, 255, 0.329);
+    border: 1px solid rgb(215, 94, 252);
+    color: #f6fa00;
+    font-family: monospace;
+    font-size: .5rem;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+}
+
+.hub-item:hover {
+    background: rgba(255, 183, 0, 0.3);
+    border-color: var(--hdo-gold, #ffb700);
+    box-shadow: 0 0 8px rgba(255, 183, 0, 0.5);
+}
+
+.hub-close {
+    background: rgba(255, 0, 0, 0.1) !important;
+    border: 1px solid rgba(255, 0, 0, 0.4) !important;
+    color: #ff3b30 !important;
+    font-weight: bold;
+}
+.hub-close:hover {
+    background: rgba(255, 0, 0, 0.3) !important;
+    border-color: #ff3b30 !important;
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.6) !important;
+}

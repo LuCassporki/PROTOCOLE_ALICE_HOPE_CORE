@@ -40,6 +40,13 @@ let startX, startY;
 const isElectron = typeof require !== 'undefined';
 const ipcRenderer = isElectron ? require('electron').ipcRenderer : null;
 
+// Exposer la fonction de transparence au niveau global de la fenêtre
+window.electronAPI_setIgnore = (ignore) => {
+    if (isElectron) {
+        ipcRenderer.send('set-ignore-mouse', ignore);
+    }
+};
+
 // =======================================================================
 // INITIALISATION DE LA BASE DE DONNÉES (MATRICE JSON)
 // =======================================================================
@@ -103,7 +110,7 @@ function startIdleGallery() {
     idleInterval = setInterval(() => {
         currentIdleIndex = (currentIdleIndex + 1) % idleImages.length;
         changeAvatarImage(idleImages[currentIdleIndex]);
-    }, 600000); // 10 minutes par fragment d'avatar
+    }, 30000); // 10 minutes par fragment d'avatar
 }
 
 function stopIdleGallery() {
@@ -190,7 +197,7 @@ function triggerInteractionHop() {
         sethopeState("idle");
         userInput.value = "";
         if (hubGrid) hubGrid.style.display = "none";
-        if (radioControls) radioControls.style.display = "none";
+        if (radioControls) radioControls.style.display = "auto";
         if (ipcRenderer) ipcRenderer.send('resize-window', { width: 250, height: 250 });
         startIdleGallery();
     }
@@ -249,8 +256,8 @@ function triggerAutonomousPing() {
 }
 
 function planNextPing() {
-    const BASE_MIN_DELAY = isSignalBoosted ? 2000 : 15000; 
-    const RANDOM_BONUS_MAX = isSignalBoosted ? 1000 : 20000; 
+    const BASE_MIN_DELAY = isSignalBoosted ? 2000 : 60000; 
+    const RANDOM_BONUS_MAX = isSignalBoosted ? 3000 : 120000; 
 
     const nextDynamicDelay = BASE_MIN_DELAY + Math.floor(Math.random() * RANDOM_BONUS_MAX);
     console.log(`[HDO RADIO] : Fréquence calée. Prochain scan dans ${(nextDynamicDelay / 1000).toFixed(1)}s.`);
@@ -339,10 +346,10 @@ function processCommand(rawInput) {
             if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 720 });
             return;
 
-        case 'flower':
+        case 'hub':
             // COMMANDE MAÎTRESSE : Déploiement simultané des 4 quadrants
             sethopeState("speaking");
-            outputText.textContent = "[HOPE] : MATRICE FLOWER INITIALISÉE. Déploiement global de la structure géométrique.";
+            outputText.textContent = "[HOPE] : MATRICE HUB INITIALISÉE. Déploiement global de la structure géométrique.";
             
             // Affiche les 4 grilles en même temps
             Object.keys(grids).forEach(key => grids[key].style.display = "grid");
@@ -426,4 +433,24 @@ if (hubInventory) {
     hubInventory.addEventListener('click', () => {
         outputText.textContent = "[MAJOR] : Inventaire tactique indisponible. Redirection via le lien d'ancrage.";
     });
+}
+
+// =======================================================================
+// AJUSTEMENT CYBERNÉTIQUE DE LA VITRE (AUTO-RESIZE TO CONTENT)
+// =======================================================================
+function syncWindowSizeToContent() {
+    if (!isElectron) return;
+
+    // Petite temporisation pour laisser le temps au DOM et au CSS de se positionner
+    setTimeout(() => {
+        // On récupère les dimensions réelles du contenu du body
+        // On ajoute une petite marge de sécurité de 20px pour éviter les barres de défilement
+        const currentWidth = document.body.scrollWidth + 20;
+        const currentHeight = document.body.scrollHeight + 20;
+
+        console.log(`[HDO AUTO-RESIZE] : Ajustement de la capsule -> ${currentWidth}x${currentHeight}px`);
+        
+        // On envoie les dimensions exactes à main.js
+        ipcRenderer.send('resize-window', { width: currentWidth, height: currentHeight });
+    }, 50);
 }

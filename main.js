@@ -5,33 +5,69 @@ let win; // On déclare la variable globale pour la fenêtre unique
 
 function createHopWindow() {
     win = new BrowserWindow({
-        width: 450,            // Taille initiale réduite pour la bulle en mode Idle
-        height: 450,
-        frame: false,          // Désactive les bordures Windows (Pas de bandeau classique)
-        transparent: true,      // Fond 100% transparent pour intégration sur l'écran
-        alwaysOnTop: true,      // Force la bulle à flotter au-dessus de TOUTES les applications
-        resizable: false,       // Évite que l'utilisateur déforme la bulle manuellement
-        skipTaskbar: false,     // Laisse l'icône dans la barre des tâches pour pouvoir la fermer au besoin
+        width: 270,             // Taille de départ
+        height: 270,
+        frame: false,
+        transparent: true,
+        alwaysOnTop: true,
+        resizable: false,
+        skipTaskbar: false,
         webPreferences: {
-            nodeIntegration: true,   // Activé pour permettre l'IPC direct (redimensionnement)
-            contextIsolation: false  // Permet à hope.js d'envoyer des messages à main.js facilement
+            nodeIntegration: true,
+            contextIsolation: false
         }
+    });
+
+    win.loadURL('https://lucassporki.github.io/PROTOCOLE_ALICE_HOPE_CORE/');
+
+    // =======================================================================
+    // LE FILTRE FANTÔME (Ignorer le vide, capturer les éléments cliquables)
+    // =======================================================================
+    win.webContents.on('dom-ready', () => {
+        win.webContents.executeJavaScript(`
+            window.addEventListener('mousemove', (event) => {
+                // On vérifie si la souris survole du vide ou le fond du body
+                const isOverVoid = event.target === document.documentElement || 
+                                   event.target === document.body || 
+                                   event.target.id === 'hope-grid-anchor';
+                
+                if (isOverVoid) {
+                    // La souris passe À TRAVERS la fenêtre
+                    window.electronAPI_setIgnore(true);
+                } else {
+                    // La souris CAPTURE les clics sur les boutons/inputs
+                    window.electronAPI_setIgnore(false);
+                }
+            });
+        `);
     });
 
     // ARCHITECTURE SYNCHRONE : Charge ton déploiement GitHub Pages direct.
     // Toute modification poussée sur GitHub sera visible instantanément sur ton PC !
     win.loadURL('https://lucassporki.github.io/PROTOCOLE_ALICE_HOPE_CORE/');
 
-    // Gestion du focus pour s'assurer que la bulle reste au-dessus des jeux ou de VS Code
     win.on('focus', () => {
         win.setAlwaysOnTop(true, 'screen-saver');
     });
 
-    // Sécurité si la fenêtre est fermée
     win.on('closed', () => {
         win = null;
     });
 }
+
+// Liaison IPC pour le commutateur de transparence aux clics
+ipcMain.on('set-ignore-mouse', (event, ignore) => {
+    if (win) {
+        // L'option { forward: true } est indispensable : elle permet à Electron de continuer
+        // à envoyer les événements de souris (comme le mousemove) au HTML même quand on clique à travers !
+        win.setIgnoreMouseEvents(ignore, { forward: true });
+    }
+});
+
+// Ton écouteur de redimensionnement classique qui reste inchangé
+ipcMain.on('resize-window', (event, { width, height }) => {
+    if (win) win.setSize(width, height);
+});
 
 // =======================================================================
 // ÉCOUTEUR IPC (Redimensionnement Dynamique de la Vitre Invisible)
