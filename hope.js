@@ -9,7 +9,6 @@ const outputText = document.getElementById('hope-output-text');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 const netTag = document.getElementById('network-tag');
-const audio = document.getElementById('audio');
 
 let lastInteractionTime = Date.now();
 let currentMode = "idle";
@@ -90,7 +89,6 @@ function sethopeState(mode) {
 
     if (mode === "idle") {
         netTag.textContent = "STABLE"; netTag.style.color = "#00f0ff";
-        audio.classList.add('none');
         startIdleGallery();
     } 
     else {

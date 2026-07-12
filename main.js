@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
 function createHopWindow() {
@@ -62,7 +62,7 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
 
-const { app, BrowserWindow, ipcMain } = require('electron');
+
 
 let win;
 
