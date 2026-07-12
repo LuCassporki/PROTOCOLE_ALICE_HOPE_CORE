@@ -32,7 +32,7 @@
                 <div class="audio-bar"></div>
             </div>
         </div>
-
+ 
         <!-- Console de Dialogue Rétroéclairée -->
         <div class="hope-terminal-overlay " id="hope-terminal">
             <div class="terminal-header">
@@ -40,11 +40,19 @@
                 <span id="network-tag">STABLE</span>
             </div>
             <div class="terminal-output" id="hope-output-text">
+               
                 [HOPE] : Initialisation modulaire réussie, Alexander. Les fichiers HTML et CSS sont séparés. Liaison neuronale prête.
             </div>
             <div class="terminal-input-row">
                 <input type="text" id="user-input" placeholder="Injecter une commande..." autocomplete="off">
                 <button class="terminal-send-btn" id="send-btn">Send</button>
+            </div>
+            <div id="hdo-radio-controls" class="radio-controls" style="display: block;">
+    <!-- Bouton pour fermer/acquitter le log actuel -->
+    <button id="radio-clear-btn" class="radio-btn btn2">❌ ACQUITTER</button>
+    <!-- Bouton pour forcer le signal (Boost) -->
+    <button id="radio-vocal-btn" class="radio-btn btn3">🔊[OFF]</button>
+    <button id="radio-boost-btn" class="radio-btn btn1">📡 BOOST[OFF]</button>
             </div>
         </div>
 

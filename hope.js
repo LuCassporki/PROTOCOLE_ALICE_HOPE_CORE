@@ -9,6 +9,10 @@ const outputText = document.getElementById('hope-output-text');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 const netTag = document.getElementById('network-tag');
+const radioControls = document.getElementById('hdo-radio-controls');
+const radioClearBtn = document.getElementById('radio-clear-btn');
+const radioBoostBtn = document.getElementById('radio-boost-btn');
+const radioVocalBtn = document.getElementById('radio-vocal-btn');
 
 let lastInteractionTime = Date.now();
 let currentMode = "idle";
@@ -17,6 +21,13 @@ let currentMode = "idle";
 let isMouseDown = false;
 let startTime = 0;
 let startX, startY;
+
+let isSignalBoosted = false;
+let currentPingTimeout = null;
+
+
+// VARIABLES DE CONTRÔLE VOCAL
+let isVocalEnabled = false;
 
 // Variable globale pour stocker les citations rechargées du JSON
 let autonomousQuotes = [];
@@ -225,52 +236,95 @@ userInput.addEventListener('keypress', (e) => {
 // MOTEUR D'INTERCEPTION MULTICAST RECURSIF (ORGANIC DELAY)
 // =======================================================================
 function triggerAutonomousPing() {
-    // ÉTAPES PARAMÈTRES (Ajustables en millisecondes)
-    const BASE_MIN_DELAY = 15000; // 15 secondes minimum obligatoires entre deux messages
-    const RANDOM_BONUS_MAX = 20000; // Jusqu'à 20 secondes de bonus aléatoire (donc entre 15s et 35s d'écart)
-
-    const timeSinceLastAction = Date.now() - lastInteractionTime;
-
-    // Si le système est en veille et que le temps minimum depuis la dernière action (clic ou ping) est respecté
-    if (timeSinceLastAction >= BASE_MIN_DELAY && currentMode === "idle" && autonomousQuotes.length > 0) {
-        
-        lastInteractionTime = Date.now();
-        sethopeState("speaking");
-        terminal.classList.add('open');
-
-        // Extraction du flux radio
-        const randomQuote = autonomousQuotes[Math.floor(Math.random() * autonomousQuotes.length)];
-        outputText.textContent = randomQuote;
-
-        // Temps d'affichage du message avant fermeture (3,5 secondes)
-        setTimeout(() => {
-            if (currentMode === "speaking") {
-                sethopeState("idle");
-            }
-            terminal.classList.remove('open');
-            
-            // PROGRAMMATION DE LA PROCHAINE INTERCEPTION (Relance après la fermeture)
-            planNextPing();
-        }, 5000);
-
-    } else {
-        // Si les conditions n'étaient pas réunies, on revérifie un peu plus tard (boucle de garde courte)
-        setTimeout(triggerAutonomousPing, 2000);
+    // Si l'utilisateur est en train de parler ou que le terminal est déjà ouvert manuellement, on passe notre tour
+    if (currentMode !== "idle" || autonomousQuotes.length === 0) {
+        currentPingTimeout = setTimeout(triggerAutonomousPing, 2000);
+        return;
     }
+
+    lastInteractionTime = Date.now();
+    sethopeState("speaking");
+    terminal.classList.add('open');
+    
+    // On affiche les boutons de contrôle radio
+    if (radioControls) radioControls.style.display = "flex";
+
+    // ÉXÉCUTION : On pioche un flux. 
+    // Si le Boost est activé, on cible PRIORITAIREMENT les dialogues croisés ("|")
+    let avaliableQuotes = autonomousQuotes;
+    if (isSignalBoosted) {
+        const dialogues = autonomousQuotes.filter(q => q.includes("|"));
+        if (dialogues.length > 0) avaliableQuotes = dialogues;
+    }
+
+    const randomQuote = avaliableQuotes[Math.floor(Math.random() * avaliableQuotes.length)];
+    outputText.textContent = randomQuote;
+
+    // IMPORTANT : On NE met PAS de setTimeout pour fermer automatiquement !
+    // Le terminal reste figé comme une notification tant que le Major n'appuie pas sur "Acquitter"
 }
 
-// Fonction de calcul de la variance temporelle
+// Fonction de planification (Variance de temps)
 function planNextPing() {
-    const BASE_MIN_DELAY = 15000; 
-    const RANDOM_BONUS_MAX = 20000; 
+    // Si le boost est activé, on enchaîne TOUTES LES 4 À 8 SECONDES !
+    // Sinon, rythme normal (15s à 35s)
+    const BASE_MIN_DELAY = isSignalBoosted ? 2000 : 8000; 
+    const RANDOM_BONUS_MAX = isSignalBoosted ? 500 : 4000; 
 
-    // Calcul mathématique : 15000 + (0 à 1) * 20000
     const nextDynamicDelay = BASE_MIN_DELAY + Math.floor(Math.random() * RANDOM_BONUS_MAX);
     
-    console.log(`[HDO SYSTEM] : Prochaine interception programmée dans ${(nextDynamicDelay / 1000).toFixed(1)} secondes.`);
-    
-    setTimeout(triggerAutonomousPing, nextDynamicDelay);
+    console.log(`[HDO RADIO] : Fréquence calée. Prochain scan dans ${(nextDynamicDelay / 1000).toFixed(1)}s.`);
+    currentPingTimeout = setTimeout(triggerAutonomousPing, nextDynamicDelay);
 }
+
+// =======================================================================
+// ÉCOUTEURS D'ÉVÉNEMENTS DES BOUTONS NARRATIFS
+// =======================================================================
+
+// 1. Bouton Acquitter (Ferme le message et relance la montre)
+radioClearBtn.addEventListener('click', () => {
+    sethopeState("idle");
+    terminal.classList.remove('open');
+    if (radioControls) radioControls.style.display = "none";
+    
+    // Le message est lu, on replanifie la prochaine interception
+    lastInteractionTime = Date.now();
+    planNextPing();
+});
+
+// 2. Bouton Boost Signal (Surchauffe les fréquences pour enchaîner l'histoire)
+radioBoostBtn.addEventListener('click', () => {
+    isSignalBoosted = !isSignalBoosted;
+    
+    if (isSignalBoosted) {
+        radioBoostBtn.textContent = "📡 BOOST[MAX]";
+        radioBoostBtn.style.borderColor = "var(--hdo-gold)";
+        radioBoostBtn.style.color = "var(--hdo-gold)";
+        
+        // Si le terminal est fermé lors du clic, on force un ping immédiat
+        if (!terminal.classList.contains('open')) {
+            clearTimeout(currentPingTimeout);
+            triggerAutonomousPing();
+        }
+    } else {
+        radioBoostBtn.textContent = "📡 BOOST[OFF]";
+        radioBoostBtn.style.borderColor = "";
+        radioBoostBtn.style.color = "";
+    }
+});
+
+// Fonction de calcul de la variance temporelle
+// function planNextPing() {
+//     const BASE_MIN_DELAY = 1000; 
+//     const RANDOM_BONUS_MAX = 2000; 
+
+//     // Calcul mathématique : 15000 + (0 à 1) * 20000
+//     const nextDynamicDelay = BASE_MIN_DELAY + Math.floor(Math.random() * RANDOM_BONUS_MAX);
+    
+//     console.log(`[HDO SYSTEM] : Prochaine interception programmée dans ${(nextDynamicDelay / 1000).toFixed(1)} secondes.`);
+    
+//     setTimeout(triggerAutonomousPing, nextDynamicDelay);
+// }
 
 // INITIALISATION DU SYSTÈME AU CHARGEMENT DE LA PAGE
 document.addEventListener('DOMContentLoaded', () => {
@@ -280,4 +334,95 @@ document.addEventListener('DOMContentLoaded', () => {
         // INITIALISATION DU MOTEUR TEMPOREL
         planNextPing(); 
     });
+});
+
+
+
+
+// Moteur de nettoyage de texte pour la synthèse vocale
+function speakMatrixLog(text) {
+    if (!('speechSynthesis' in window)) return; // Sécurité si non supporté
+
+    // On coupe la parole en cours s'il y en a une pour éviter les superpositions
+    window.speechSynthesis.cancel();
+
+    // NETTOYAGE NARRATIF : On retire les balises techniques pour la voix
+    let cleanText = text
+        .replace(/\[HOPE\] 'Interception.*?' :/g, 'Interception.')
+        .replace(/\[INTERCEPTION DIALOGUE\]/g, 'Alerte flux croisé.')
+        .replace(/\[.*?\] :/g, '') // Enlève les [MAJOR] :, [ALICE] :
+        .replace(/\|/g, '... de son côté, s\'exclame :'); // Rend les dialogues fluides
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    
+    // Configuration de la voix
+    utterance.lang = 'fr-FR'; // On force la langue française
+    utterance.pitch = .9;    // Un pitch légèrement plus bas pour un effet capsule radio
+    utterance.rate = 1.8;     // Une vitesse de diction très légèrement militaire/rapide
+
+    window.speechSynthesis.speak(utterance);
+}
+
+// MISE À JOUR DE TON PROTOCOLE D'INTERCEPTION EXISTANT
+function triggerAutonomousPing() {
+    if (currentMode !== "idle" || autonomousQuotes.length === 0) {
+        currentPingTimeout = setTimeout(triggerAutonomousPing, 2000);
+        return;
+    }
+
+    lastInteractionTime = Date.now();
+    sethopeState("speaking");
+    terminal.classList.add('open');
+    
+    if (radioControls) radioControls.style.display = "flex";
+
+    let avaliableQuotes = autonomousQuotes;
+    if (isSignalBoosted) {
+        const dialogues = autonomousQuotes.filter(q => q.includes("|"));
+        if (dialogues.length > 0) avaliableQuotes = dialogues;
+    }
+
+    const randomQuote = avaliableQuotes[Math.floor(Math.random() * avaliableQuotes.length)];
+    outputText.textContent = randomQuote;
+
+    // --- LOGIQUE TOGGLE VOCAL AUTOMATIQUE ---
+    if (isVocalEnabled) {
+        speakMatrixLog(randomQuote);
+    }
+}
+
+// =======================================================================
+// ÉCOUTEURS D'ÉVÉNEMENTS VOCAUX
+// =======================================================================
+
+// 1. Gestionnaire du bouton Toggle
+radioVocalBtn.addEventListener('click', () => {
+    isVocalEnabled = !isVocalEnabled;
+    
+    if (isVocalEnabled) {
+        radioVocalBtn.textContent = "🔊[ON  ]";
+        radioVocalBtn.style.borderColor = "#00bf33"; // Vert quand c'est actif
+        radioVocalBtn.style.color = "#00bf33";
+        
+        // Parle immédiatement pour le log actuellement affiché à l'écran
+        speakMatrixLog(outputText.textContent);
+    } else {
+        radioVocalBtn.textContent = "🔊[OFF]";
+        radioVocalBtn.style.borderColor = "";
+        radioVocalBtn.style.color = "";
+        window.speechSynthesis.cancel(); // Coupe la parole immédiatement
+    }
+});
+
+// 2. LECTURE MANUELLE : Si on clique directement sur le texte du terminal
+outputText.style.cursor = "pointer"; // Indique au Major qu'on peut cliquer dessus
+outputText.addEventListener('click', () => {
+    // Permet de lire à la demande, même si le mode automatique est sur OFF
+    speakMatrixLog(outputText.textContent);
+});
+
+// Pense à couper le son si le Major acquitte le message avant la fin de la dictée
+radioClearBtn.addEventListener('click', () => {
+    window.speechSynthesis.cancel();
+    // Ton code d'acquittement existant...
 });
