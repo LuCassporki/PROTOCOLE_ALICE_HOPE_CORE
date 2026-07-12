@@ -18,12 +18,30 @@ let isMouseDown = false;
 let startTime = 0;
 let startX, startY;
 
-const autonomousQuotes = [
-    "[HOPE] : Diagnostic autonome effectué. Tout est nominal, Alexander.",
-    "[HOPE] : Les flux d'énergie de la matrice HDO sont stables.",
-    "[HOPE] : Système en veille active. J'attends tes instructions.",
-    "[HOPE] : Liaison synaptique stable. Capsule parée à l'exécution."
-];
+// Variable globale pour stocker les citations rechargées du JSON
+let autonomousQuotes = [];
+
+// Fonction pour charger la base de données narrative de la Matrix
+async function loadAutonomousQuotes() {
+    try {
+        const response = await fetch('quotes.json');
+        const data = await response.json();
+        // On filtre pour ignorer les lignes de commentaires explicatives du JSON
+        autonomousQuotes = data.filter(line => !line.startsWith("//"));
+        console.log(`[HDO SYSTEM] : ${autonomousQuotes.length} flux mémoriels injectés avec succès.`);
+    } catch (error) {
+        console.error("[HDO SYSTEM] : Échec de l'interception du fichier quotes.json :", error);
+        // Solution de secours au cas où le fichier est manquant
+        autonomousQuotes = ["[HOPE] : Liaison synaptique stable. Capsule opérationnelle."];
+    }
+}
+
+// APPEL AU CHARGEMENT (À glisser tout en bas de ton script, ou dans ton DOMContentLoaded)
+document.addEventListener('DOMContentLoaded', () => {
+    loadAutonomousQuotes().then(() => {
+        startIdleGallery(); // Relance ta galerie une fois les textes prêts
+    });
+});
 
 // =======================================================================
 // CONFIGURATION DE LA BANQUE D'IMAGES (ALICE VISUALS)
@@ -42,7 +60,8 @@ const idleImages = [
 const stateImages = {
     listening: 'media/hope/listening-hope.png',
     thinking: 'media/hope/thinking-hope.png',
-    speaking: 'media/hope/speaking-hope.png' 
+    speaking: 'media/hope/speaking-hope.png',
+    panique: 'media/hope/panique-hope.png' 
 };
 
 let idleInterval = null;
@@ -84,7 +103,7 @@ function stopIdleGallery() {
 // =======================================================================
 function sethopeState(mode) {
     currentMode = mode;
-    anchor.classList.remove('state-listening', 'state-thinking', 'state-speaking');
+    anchor.classList.remove('state-listening', 'state-thinking', 'state-speaking', 'state-panique');
     essence.classList.remove('speaking');
 
     if (mode === "idle") {
@@ -109,6 +128,10 @@ function sethopeState(mode) {
             anchor.classList.add('state-speaking');
             essence.classList.add('speaking');
             netTag.textContent = "LIVE"; netTag.style.color = "#00bf33";
+        }
+        else if (mode === "panique") {
+            anchor.classList.add('state-panique');
+            netTag.textContent = "ALERT"; netTag.style.color = "#ff0000";
         }
     }
 }
@@ -173,8 +196,12 @@ function triggerhopeResponse() {
     outputText.textContent = `[Analyse] : Traitement de la commande en cours...`;
 
     setTimeout(() => {
-        sethopeState("speaking");
-        outputText.textContent = `[HOPE] : Commande "${cmd}" compilée. Le protocole répond parfaitement.`;
+        if(cmd=="end"){ sethopeState("panique");
+            outputText.textContent = `[HOPE] : Commande "${cmd}" interdite. tu ne fait pas deux fois la meme erreur non !? Alors ne lache pas elle t'attend quelque part!`;
+        }
+        else{sethopeState("speaking");
+            outputText.textContent = `[HOPE] : Commande "${cmd}" compilée. Le protocole répond parfaitement.`;
+        }
 
         setTimeout(() => {
             if (terminal.classList.contains('open')) {
@@ -182,29 +209,75 @@ function triggerhopeResponse() {
             } else {
                 sethopeState("idle");
             }
+            // outputText.textContent = "";
         }, 3500);
     }, 1200);
 }
 
 sendBtn.addEventListener('click', triggerhopeResponse);
-userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') triggerhopeResponse(); });
+userInput.addEventListener('keypress', (e) => { 
+    if (e.key === 'Enter') triggerhopeResponse();
+
+});
 
 // Cycle autonome d'inactivité (Ping Émotionnel calibré à 15s)
-setInterval(() => {
+// =======================================================================
+// MOTEUR D'INTERCEPTION MULTICAST RECURSIF (ORGANIC DELAY)
+// =======================================================================
+function triggerAutonomousPing() {
+    // ÉTAPES PARAMÈTRES (Ajustables en millisecondes)
+    const BASE_MIN_DELAY = 15000; // 15 secondes minimum obligatoires entre deux messages
+    const RANDOM_BONUS_MAX = 20000; // Jusqu'à 20 secondes de bonus aléatoire (donc entre 15s et 35s d'écart)
+
     const timeSinceLastAction = Date.now() - lastInteractionTime;
-    if (timeSinceLastAction > 60000 && currentMode === "idle") {
+
+    // Si le système est en veille et que le temps minimum depuis la dernière action (clic ou ping) est respecté
+    if (timeSinceLastAction >= BASE_MIN_DELAY && currentMode === "idle" && autonomousQuotes.length > 0) {
+        
         lastInteractionTime = Date.now();
         sethopeState("speaking");
+        terminal.classList.add('open');
+
+        // Extraction du flux radio
         const randomQuote = autonomousQuotes[Math.floor(Math.random() * autonomousQuotes.length)];
         outputText.textContent = randomQuote;
 
+        // Temps d'affichage du message avant fermeture (3,5 secondes)
         setTimeout(() => {
-            if (currentMode === "speaking") sethopeState("idle");
-        }, 4000);
+            if (currentMode === "speaking") {
+                sethopeState("idle");
+            }
+            terminal.classList.remove('open');
+            
+            // PROGRAMMATION DE LA PROCHAINE INTERCEPTION (Relance après la fermeture)
+            planNextPing();
+        }, 5000);
+
+    } else {
+        // Si les conditions n'étaient pas réunies, on revérifie un peu plus tard (boucle de garde courte)
+        setTimeout(triggerAutonomousPing, 2000);
     }
-}, 1000);
+}
+
+// Fonction de calcul de la variance temporelle
+function planNextPing() {
+    const BASE_MIN_DELAY = 15000; 
+    const RANDOM_BONUS_MAX = 20000; 
+
+    // Calcul mathématique : 15000 + (0 à 1) * 20000
+    const nextDynamicDelay = BASE_MIN_DELAY + Math.floor(Math.random() * RANDOM_BONUS_MAX);
+    
+    console.log(`[HDO SYSTEM] : Prochaine interception programmée dans ${(nextDynamicDelay / 1000).toFixed(1)} secondes.`);
+    
+    setTimeout(triggerAutonomousPing, nextDynamicDelay);
+}
 
 // INITIALISATION DU SYSTÈME AU CHARGEMENT DE LA PAGE
 document.addEventListener('DOMContentLoaded', () => {
-    startIdleGallery();
+    loadAutonomousQuotes().then(() => {
+        startIdleGallery();
+        
+        // INITIALISATION DU MOTEUR TEMPOREL
+        planNextPing(); 
+    });
 });

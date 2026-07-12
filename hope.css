@@ -18,9 +18,9 @@ body {
     width:99vw; height: 99vh;
     font-family: 'Segoe UI', Arial, sans-serif;
     overflow: hidden;
-    border: solid  rgba(255, 230, 0, 0.466) 10px;
+    border: solid  rgba(255, 230, 0, 0.466) 3px;
 }
-.debug{ position: absolute;  top: 50%; left: 50%; translate: -50% -50%; background-color: #4645452f; width: 99vw; height: 99vh;}
+.debug{ position: absolute;  top: 50%; left: 50%; translate: -50% -50%; background-color: #464545af; width: 99vw; height: 99vh;}
 
 /* Ton ancrage doit être positionné en haut à gauche de la fenêtre Electron */
 #hope-grid-anchor {
@@ -31,7 +31,7 @@ body {
 }
 .hud-matrix-layer {
     position: absolute; 
-    top: 0; right: 0;
+    top: 0; right: 50%;  translate: 50% 10%;
     /* width: auto; height: auto;  */
    
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -151,13 +151,20 @@ body {
     box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 35px var(--hdo-green);
     animation: hopeMorphing 1s infinite ease-in-out alternate;
 }
+
 /* 2. ÉTAT PAROLE (Speaking) : Les barres réapparaissent et s'animent instantanément */
 .state-speaking .audio-bar { 
     display: inline-block !important; /* Rend les barres visibles */
     animation: hdoAudioPulse 0.4s infinite alternate ease-in-out; 
 }
 
-/* En transmission de voix, l'image reste figée stable tandis que la bulle vibre autour */
+/* 4. Analyse / Réflexion (Or Cyber) */
+.state-panique .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-gold) 0%, #f30000) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 45px var(--hdo-deep);
+    animation: hopeMorphing .5s infinite ease-in-out alternate;
+}
+
 
 
 /* =======================================================================
@@ -182,6 +189,12 @@ body {
 .state-speaking .hope-core-essence {
     background: linear-gradient(135deg, var(--hdo-green) 0%, #00220a) !important;
     box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 35px var(--hdo-green);
+}
+
+/* 4. panique active (Vert Major) */
+.state-panique .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-blood) 0%, #005704a6) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 35px var(--hdo-deep);
 }
 
 

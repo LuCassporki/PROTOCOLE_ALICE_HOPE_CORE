@@ -152,3 +152,21 @@
 .state-thinking .hope-ring2 { animation-duration: 1s, 1.5s !important; }
 .state-thinking .hope-ring3 { animation-duration: 0.8s, 1.3s !important; }
 .state-thinking .hope-ring4 { animation-duration: 1s, 1.2s !important; }
+
+
+/* -----------------------------------------------------------------------
+   État 4 : alert
+   ----------------------------------------------------------------------- */
+.state-panique .hope-ring1, 
+.state-panique .hope-ring2, 
+.state-panique .hope-ring3, 
+.state-panique .hope-ring4 { 
+    border-color: transparent;
+    border-bottom-color: var(--hdo-blood) !important;
+    filter: drop-shadow(0 0 50px var(--hdo-blood)) saturate(10) !important;
+}
+/* Surchauffe Matrix : Vitesse cinétique maximale */
+.state-panique .hope-ring1 { animation-duration: .1s, .5s !important; }
+.state-panique .hope-ring2 { animation-duration: .1s, .7s !important; }
+.state-panique .hope-ring3 { animation-duration: .1s, 1.2s !important; }
+.state-panique .hope-ring4 { animation-duration: .1s, .9s !important; }
