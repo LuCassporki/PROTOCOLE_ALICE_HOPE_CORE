@@ -10,18 +10,27 @@
 }
 
 body {
+    margin: 0;
+    padding: 0;
     background-color: transparent !important; /*OBLIGATOIRE pour l'effet holographique */
      background-image: none; /*On enlève le fond quadrillé pour le mode transparent*/
-    /* background-color: #000; */
-    width: auto; height: auto;
-    color: #ffffff;
+    background-color: #000;
+    width:99vw; height: 99vh;
     font-family: 'Segoe UI', Arial, sans-serif;
-    /* height: 100vh; */
     overflow: hidden;
-    position: relative;
-    border: solid  rgb(243, 28, 0) .5px;
+    border: solid  rgb(243, 28, 0) 10px;
 }
+.debug{ position: absolute;  top: 50%; left: 50%; translate: -50% -50%; background-color: #464545a8; width: 99vw; height: 99vh;}
 
+/* Ton ancrage doit être positionné en haut à gauche de la fenêtre Electron */
+#hope-grid-anchor {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    flex-direction: column; /* Aligne la bulle en haut et le terminal en dessous */
+    align-items: center;
+}
 .hud-matrix-layer {
     position: absolute; 
     top: 400px; left: 50%; translate: -50% -50%;
@@ -181,6 +190,10 @@ body {
 /* =======================================================================
    CONSOLE OVERLAY (PANNEAU COCKPIT)
    ======================================================================= */
+   #hope-terminal {
+    margin-top: 20px;
+    /* Tes styles existants pour le terminal ouvert/fermé */
+}
 .hope-terminal-overlay {
     position: absolute; top: 0%; left: 50%; translate: -50% 0%;
     background: var(--hdo-alice); border: 1px solid var(--hdo-gold);

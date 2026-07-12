@@ -61,3 +61,32 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
+
+const { app, BrowserWindow, ipcMain } = require('electron');
+
+let win;
+
+function createWindow () {
+    win = new BrowserWindow({
+        width: 250,        // Taille initiale réduite pour la bulle en mode Idle
+        height: 250,
+        frame: false,
+        transparent: true,
+        alwaysOnTop: true, // Pour que Hop reste visible au-dessus de tes fenêtres
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false // Permet d'utiliser window.moveBy et IPC directement pour tes tests
+        }
+    });
+
+    win.loadFile('index.html');
+}
+
+// L'ÉCOUTEUR MAGIQUE : Reçoit l'ordre de l'interface et ajuste la taille du verre invisible
+ipcMain.on('resize-window', (event, { width, height }) => {
+    if (win) {
+        win.setSize(width, height);
+    }
+});
+
+app.whenReady().then(createWindow);

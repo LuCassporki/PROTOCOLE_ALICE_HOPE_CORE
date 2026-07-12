@@ -43,7 +43,7 @@ const idleImages = [
 const stateImages = {
     listening: 'media/hope/listening-hope.png',
     thinking: 'media/hope/thinking-hope.png',
-    speaking: 'media/hope/speaking-hope.png'
+    speaking: 'media/hope/speaking-hope.png' 
 };
 
 let idleInterval = null;
@@ -71,7 +71,7 @@ function startIdleGallery() {
     idleInterval = setInterval(() => {
         currentIdleIndex = (currentIdleIndex + 1) % idleImages.length;
         changeAvatarImage(idleImages[currentIdleIndex]);
-    }, 1000);
+    }, 600000);
 }
 
 // Arrête la galerie pour figer l'image d'interaction
@@ -194,7 +194,7 @@ userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') triggerho
 // Cycle autonome d'inactivité (Ping Émotionnel calibré à 15s)
 setInterval(() => {
     const timeSinceLastAction = Date.now() - lastInteractionTime;
-    if (timeSinceLastAction > 35000 && currentMode === "idle") {
+    if (timeSinceLastAction > 60000 && currentMode === "idle") {
         lastInteractionTime = Date.now();
         sethopeState("speaking");
         const randomQuote = autonomousQuotes[Math.floor(Math.random() * autonomousQuotes.length)];
