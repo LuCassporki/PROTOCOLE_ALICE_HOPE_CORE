@@ -166,7 +166,7 @@ body {
     max-height: 500px; /* Permet le déploiement vertical fluide */
     margin-top: 15px;
     overflow: visible; /* CRUCIAL : Laisse l'ombre box-shadow jaune déborder et briller à l'extérieur ! */
-    translate: -25% 0;
+    translate: -25% ;
 }
 
 

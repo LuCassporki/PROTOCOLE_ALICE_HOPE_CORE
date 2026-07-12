@@ -317,7 +317,7 @@ outputText.addEventListener('click', () => {
 // =======================================================================
 // INTERPRÉTEUR DE COMMANDES HDO & DIALOGUES UTILISATEUR
 // =======================================================================
-function processCommand(rawInput) {
+async function processCommand(rawInput) {
     const command = rawInput.trim();
     if (!command) return;
 
@@ -331,6 +331,15 @@ function processCommand(rawInput) {
         3: document.getElementById('hdo-hub-grid-3'),
         4: document.getElementById('hdo-hub-grid-4')
     };
+
+    // 1. DÉTECTION DES COMMANDES SYSTÈMES ET REFRESH DE LA DATA SHEETS
+    if (cleanCmd.startsWith('hub') || cleanCmd === 'hub') {
+        sethopeState("thinking");
+        outputText.textContent = "[HDO CLOUD] : Synchronisation des fréquences avec le Sheets maître...";
+        
+        // L'action magique : on force la relecture des 36 boutons avant l'affichage
+        await syncFlowerFromSheets();
+    }
 
 // 1. GESTION DES COMMANDES SYSTÈMES
     switch(cleanCmd) {
@@ -370,6 +379,7 @@ function processCommand(rawInput) {
             return;
     }
 
+
     // 2. Traitement d'un texte classique (Simulateur de compilation)
     sethopeState("thinking");
     outputText.textContent = `[Analyse] : Traitement de la commande en cours...`;
@@ -382,6 +392,20 @@ function processCommand(rawInput) {
             sethopeState(terminal.classList.contains('open') ? "listening" : "idle");
         }, 3500);
     }, 1200);
+}
+
+// Gestionnaire d'actions natives appelées depuis les boutons du HUB
+function processNativeAction(actionName) {
+    if (actionName === "force_cloud_sync") {
+        sethopeState("thinking");
+        outputText.textContent = "[HDO SYSTEM] : Re-calibrage manuel des flux en cours...";
+        
+        syncFlowerFromSheets().then(() => {
+            sethopeState("speaking");
+            outputText.textContent = "[HDO SYSTEM] : Alignement terminé. Tous les quadrants sont à jour.";
+        });
+    }
+    // Tu pourras rajouter tes autres fonctions ici (lancer de la musique, lever les boucliers...)
 }
 // =======================================================================
 // ÉCOUTEURS DES BOUTONS DE FERMETURE DES PÉTALES
@@ -454,3 +478,4 @@ function syncWindowSizeToContent() {
         ipcRenderer.send('resize-window', { width: currentWidth, height: currentHeight });
     }, 50);
 }
+

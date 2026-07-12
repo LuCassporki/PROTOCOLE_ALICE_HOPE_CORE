@@ -4,9 +4,16 @@ const path = require('path');
 let win; // On déclare la variable globale pour la fenêtre unique
 
 function createHopWindow() {
+         // On récupère la taille de l'écran principal de l'utilisateur
+    const primaryDisplay = screen.getPrimaryDisplay();
+    const { width } = primaryDisplay.workAreaSize;
     win = new BrowserWindow({
+   
         width: 270,             // Taille de départ
         height: 270,
+        // CALCUL DE LA POSITION : (Largeur Écran / 2) - (Largeur Fenêtre / 2) pour centrer pile au milieu
+        x: Math.floor((width / 2) - (270 / 2)), 
+        y: 20, // 20 pixels par rapport au haut de l'écran
         frame: false,
         transparent: true,
         alwaysOnTop: true,
