@@ -19,14 +19,14 @@
 }
 
 body {
-    margin: 0;
+    margin: 0% 25% 0% 25%;
     padding: 15px;
     background-color: transparent !important; /* Impératif pour l'effet hologramme */
     width: auto;                              /* Calque automatique sur le contenu */
     height: auto;                             /* Évite l'occupation totale de l'écran */
     font-family: 'Segoe UI', Arial, sans-serif;
     overflow: hidden;                         /* Masque les scrollbars Windows affreuses */
-    display: inline-block;                    /* Permet à la vitre Electron de mesurer le HTML réel */
+    display: inline-block;               /* Permet à la vitre Electron de mesurer le HTML réel */
 }
 
 /* Ordonnancement rectiligne : les modules s'empilent proprement vers le bas */
@@ -213,7 +213,7 @@ body {
     display: flex; flex-direction: row; justify-content: space-between; gap: 5px; margin-bottom: 10px;
 }
 .radio-btn { 
-    flex: 1; font-size: .65rem; padding: 4px; font-family: monospace; cursor: pointer;
+    flex: 1; font-size: .65rem; padding: 4px; margin-top: 5px; font-family: monospace; cursor: pointer;
     border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 4px;
 }
 .btn1{background-color: var(--hdo-major); border-radius: 5px 5px 50px 50px; }
