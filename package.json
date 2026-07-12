@@ -4,6 +4,7 @@
   "description": "PROTOCOLE_ALICE_HOPE_CORE",
   "main": "main.js",
   "scripts": {
+  "start": "electron .",
   "package": "electron-packager . hope-widget --platform=win32 --arch=x64 --overwrite",
   "build-mobile": "powershell -Command \"New-Item -ItemType Directory -Force www; Copy-Item index.html, hope.js, hop.css www/ -Force; Copy-Item media www/ -Recurse -Force\""
 },
