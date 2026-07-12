@@ -7,10 +7,10 @@
     -webkit-tap-highlight-color: transparent;
 }
 .encre{width: 200px; height: 200px;
-    border: solid  rgba(255, 255, 255, 0.432) .1px;
+    border: solid  rgba(255, 255, 255, 0.2) .1px;
     border-radius: 50% 50%;
     background: transparent;
-     box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.4), 0px 0px 1px rgba(0, 0, 0, 0.4);
+     box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2), 0px 0px 2px rgba(0, 0, 0, 0.3);
        -webkit-app-region: drag !important;
     cursor: move;
     display: flex;
@@ -19,18 +19,17 @@
 }
 
 body {
-    margin: 0% 25% 0% 25%;
-    padding: 15px;
     background-color: transparent !important; /* Impératif pour l'effet hologramme */
     width: auto;                              /* Calque automatique sur le contenu */
     height: auto;                             /* Évite l'occupation totale de l'écran */
     font-family: 'Segoe UI', Arial, sans-serif;
     overflow: hidden;                         /* Masque les scrollbars Windows affreuses */
-    display: inline-block;               /* Permet à la vitre Electron de mesurer le HTML réel */
+    display: inline-block;   
+    place-items: center;            /* Permet à la vitre Electron de mesurer le HTML réel */
 }
 
 /* Ordonnancement rectiligne : les modules s'empilent proprement vers le bas */
-#hope-grid-anchor, #hope-terminal, .flower {
+#hope-grid-anchor, #hope-terminal, .hub {
     display: block;
     margin-bottom: 15px;
 }
@@ -145,11 +144,10 @@ body {
     z-index: 5;
     
     /* États initiaux de fermeture (gérés par le script) */
-    opacity: 0;
+    opacity: 1;
     max-height: 0;
     overflow: hidden; /* Masque le texte et les inputs à la fermeture */
 
-    /* 2. Le Moteur de Flux Lumineux (Dégradé ondulant) */
     background: linear-gradient(135deg, 
         var(--hdo-purple) 0%, 
         var(--hdo-tunder) 50%,
@@ -166,7 +164,6 @@ body {
     max-height: 500px; /* Permet le déploiement vertical fluide */
     margin-top: 15px;
     overflow: visible; /* CRUCIAL : Laisse l'ombre box-shadow jaune déborder et briller à l'extérieur ! */
-    translate: -25% ;
 }
 
 
@@ -223,7 +220,7 @@ body {
 
 
 /* =======================================================================
-   REGION 6 : LA STRUCTURE NÉON FLOWER (QUADRANTS 3X3)
+   REGION 6 : LA STRUCTURE NÉON hub (QUADRANTS 3X3)
    ======================================================================= */
 .hub {
     background: transparent; 

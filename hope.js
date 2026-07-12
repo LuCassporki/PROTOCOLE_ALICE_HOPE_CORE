@@ -192,7 +192,7 @@ function triggerInteractionHop() {
     if (isOpen) {
         sethopeState("listening");
         outputText.textContent = "[HOPE] : Écoute active en ligne. J'analyse tes requêtes, MAJOR.";
-        if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 450 });
+        if (ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 450 });
     } else {
         sethopeState("idle");
         userInput.value = "";
