@@ -18,7 +18,8 @@
    border: rgba(255, 0, 0, 0) solid 1px;
 }
 
-
+.tst{border: solid  rgb(243, 28, 0) 3px;}
+.ok{border: solid  rgb(0, 255, 0) 3px;}
 
 /* animation: hopeMorphing 3s infinite ease-in-out alternate;
 animation: hopeRotation 25s infinite linear; */

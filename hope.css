@@ -18,15 +18,15 @@ body {
     width:99vw; height: 99vh;
     font-family: 'Segoe UI', Arial, sans-serif;
     overflow: hidden;
-    border: solid  rgb(243, 28, 0) 10px;
+    border: solid  rgba(255, 230, 0, 0.466) 10px;
 }
-.debug{ position: absolute;  top: 50%; left: 50%; translate: -50% -50%; background-color: #464545a8; width: 99vw; height: 99vh;}
+.debug{ position: absolute;  top: 50%; left: 50%; translate: -50% -50%; background-color: #4645452f; width: 99vw; height: 99vh;}
 
 /* Ton ancrage doit être positionné en haut à gauche de la fenêtre Electron */
 #hope-grid-anchor {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 70px;
+    right: 0px;
     display: flex;
     flex-direction: column; /* Aligne la bulle en haut et le terminal en dessous */
     align-items: center;
