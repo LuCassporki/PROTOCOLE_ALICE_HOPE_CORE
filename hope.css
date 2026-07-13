@@ -132,14 +132,10 @@ body {
    ======================================================================= */
 .hope-terminal-overlay {
     display: block; /* Placement naturel dans la colonne du body */
-    width: 380px; 
-    
-    /* 1. Configuration des Bordures, Formes et Ombres */
-    border: 5px solid white; /* Ta bordure de test */
+    width: 350px; 
     border-radius: 20px 50px 20px 20px; 
     padding: 12px; 
-    box-shadow: 0 0px 80px rgb(251, 255, 18); /* Ta lueur jaune massive */
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(50px);
     transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1); 
     z-index: 5;
     
@@ -162,7 +158,7 @@ body {
 .hope-terminal-overlay.open { 
     opacity: 0.95;     /* CORRIGÉ : Valeur max de 1 (0.95 pour garder une fine transparence) */
     max-height: 500px; /* Permet le déploiement vertical fluide */
-    margin-top: 15px;
+    margin-top: 5px;
     overflow: visible; /* CRUCIAL : Laisse l'ombre box-shadow jaune déborder et briller à l'extérieur ! */
 }
 
