@@ -1,0 +1,172 @@
+.hope-bubble-container {
+    /* CRUCIAL : Ouvre l'espace tridimensionnel pour que les anneaux se déploient en profondeur */
+    perspective: 800px;
+    transform-style: preserve-3d;
+}
+
+/* =======================================================================
+   GRADUATION CINÉTIQUE ET LOGIQUE COMMUNE DES ANNEAUX (CŒUR NUCLÉAIRE)
+   ======================================================================= */
+.hope-ring1, .hope-ring2, .hope-ring3, .hope-ring4 {
+    position: absolute;
+    border-radius: 50%;
+    transform-style: preserve-3d;
+    
+    /* Changement d'épaisseur pour un effet de faisceau énergétique plasma */
+    border: 2px solid transparent; 
+    
+    /* Par défaut en IDLE : Mouvement lent, lueur diffuse asynchrone */
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    transition: border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.6s ease, 
+                filter 0.6s ease;
+}
+
+/* =======================================================================
+   INCLINAISONS 3D SPATIALES ET SIGNATURES LUMINEUSES
+   ======================================================================= */
+
+/* Ring 1 : Alpha Matrix (Cyan) */
+.hope-ring1 {
+    width: 155px; height: 155px;
+    border-top-color: var(--hdo-black);
+    border-bottom-color: var(--hdo-purple);
+    /* L'angle de base est fixé ici. L'animation ne fait varier QUE le Z pour éviter les micro-saccades */
+    transform: rotateX(45deg) rotateY(35deg);
+    animation: corePulse1 4s infinite ease-in-out alternate, ringRotationZ 11s infinite linear;
+}
+
+/* Ring 2 : Void Matrix (Purple) */
+.hope-ring2 {
+    width: 165px; height: 165px;
+    border-left-color: var(--hdo-alice);
+    border-right-color: var(--hdo-gold);
+    transform: rotateX(55deg) rotateY(-45deg);
+    animation: corePulse2 2s infinite ease-in-out alternate, ringRotationZ 15s infinite linear reverse;
+}
+
+/* Ring 3 : Major Tactical Matrix (Blood) */
+.hope-ring3 {
+    width: 175px; height: 175px;
+    border-top-color: var(--hdo-green);
+    border-bottom-color: var(--hdo-blood);
+    transform: rotateX(75deg) rotateY(10deg);
+    animation: corePulse1 4s infinite ease-in-out alternate, ringRotationZ 9s infinite linear;
+}
+
+/* Ring 4 : Synaptic Alice Matrix (Pink / Alice) */
+.hope-ring4 {
+    width: 185px; height: 185px;
+    border-left-color: var(--hdo-cyan);
+    border-bottom-color: var(--hdo-tunder);
+    transform: rotateX(20deg) rotateY(70deg);
+    animation: corePulse2 1s infinite ease-in-out alternate, ringRotationZ 13s infinite linear reverse;
+}
+
+/* =======================================================================
+   MOTEURS CINÉTIQUES ET LUMINEUX (PURE 3D CONTEXTUELLE)
+   ======================================================================= */
+
+/* Moteur de rotation pure sur l'axe du disque (Z) - Ne casse jamais la perspective */
+@keyframes ringRotationZ {
+    0%   { rotate: Z 0deg; }
+    100% { rotate: Z 360deg; }
+}
+
+/* Pulsation d'intensité 1 (Flux thermique nucléaire) */
+@keyframes corePulse1 {
+    0% {
+        opacity: 0.4;
+        box-shadow:  0 0 15px var(--hdo-gold), 0 0 15px currentColor;
+    }
+    100% {
+        opacity: 1;
+        box-shadow:  0 0 8px var(--hdo-purple), 0 0 5px currentColor;
+    }
+}
+
+/* Pulsation d'intensité 2 (Déphasage lumineux asynchrone pour l'effet organique) */
+@keyframes corePulse2 {
+    0% {
+        opacity: 0.9;
+        box-shadow:  0 0 10px var(--hdo-white), 0 0 14px currentColor;
+    }
+    100% {
+        opacity: 0.3;
+        box-shadow:  0 0 10px var(--hdo-alice), 0 0 13px currentColor;
+    }
+}
+
+/* =======================================================================
+   LOGIQUE DE GRADUATION DES ÉTATS (VITESSE & INTENSITÉ)
+   ======================================================================= */
+
+/* -----------------------------------------------------------------------
+   État 1 : ÉCOUTE ACTIVE (Listening) -> Échauffement, vitesse modérée rythmée
+   ----------------------------------------------------------------------- */
+.state-listening .hope-ring1, 
+.state-listening .hope-ring2, 
+.state-listening .hope-ring3, 
+.state-listening .hope-ring4 { 
+    border-color: transparent;
+    border-top-color: var(--hdo-pink) !important;
+    filter: drop-shadow(0 0 20px var(--hdo-pink)) !important;
+}
+/* Écoute : un peu plus rapide que l'Idle */
+.state-listening .hope-ring1 { animation-duration: 4s, 7s !important; }
+.state-listening .hope-ring2 { animation-duration: 5s, 5.5s !important; }
+.state-listening .hope-ring3 { animation-duration: 4s, 6s !important; }
+.state-listening .hope-ring4 { animation-duration: 5s, 5s !important; }
+
+/* -----------------------------------------------------------------------
+   État 2 : PAROLE ACTIVE (Speaking) -> Vitesse rapide, harmonisation hertzienne
+   ----------------------------------------------------------------------- */
+.state-speaking .hope-ring1, 
+.state-speaking .hope-ring2, 
+.state-speaking .hope-ring3, 
+.state-speaking .hope-ring4 { 
+    border-color: transparent;
+    border-left-color: var(--hdo-green) !important;
+    filter: drop-shadow(0 0 25px var(--hdo-green)) !important;
+}
+/* Parole : accélération nette */
+.state-speaking .hope-ring1 { animation-duration: 2s, 4s !important; }
+.state-speaking .hope-ring2 { animation-duration: 2.5s, 5s !important; }
+.state-speaking .hope-ring3 { animation-duration: 2s, 3.5s !important; }
+.state-speaking .hope-ring4 { animation-duration: 2.5s, 4.5s !important; }
+
+/* -----------------------------------------------------------------------
+   État 3 : ANALYSE / CRUNCH (Thinking) -> Vitesse critique, surchauffe maximale
+   ----------------------------------------------------------------------- */
+.state-thinking .hope-ring1, 
+.state-thinking .hope-ring2, 
+.state-thinking .hope-ring3, 
+.state-thinking .hope-ring4 { 
+    border-color: transparent;
+    border-bottom-color: var(--hdo-gold) !important;
+    filter: drop-shadow(0 0 35px var(--hdo-gold)) saturate(2) !important;
+}
+/* Surchauffe Matrix : Vitesse cinétique maximale */
+.state-thinking .hope-ring1 { animation-duration: 0.8s, 1.1s !important; }
+.state-thinking .hope-ring2 { animation-duration: 1s, 1.5s !important; }
+.state-thinking .hope-ring3 { animation-duration: 0.8s, 1.3s !important; }
+.state-thinking .hope-ring4 { animation-duration: 1s, 1.2s !important; }
+
+
+/* -----------------------------------------------------------------------
+   État 4 : alert
+   ----------------------------------------------------------------------- */
+.state-panique .hope-ring1, 
+.state-panique .hope-ring2, 
+.state-panique .hope-ring3, 
+.state-panique .hope-ring4 { 
+    border-color: transparent;
+    border-bottom-color: var(--hdo-blood) !important;
+    filter: drop-shadow(0 0 50px var(--hdo-blood)) saturate(10) !important;
+}
+/* Surchauffe Matrix : Vitesse cinétique maximale */
+.state-panique .hope-ring1 { animation-duration: .1s, .5s !important; }
+.state-panique .hope-ring2 { animation-duration: .1s, .7s !important; }
+.state-panique .hope-ring3 { animation-duration: .1s, 1.2s !important; }
+.state-panique .hope-ring4 { animation-duration: .1s, .9s !important; }

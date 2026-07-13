@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HDO - hope Core Core v0.2</title>
+    <!-- Liaison vers ta physique de style externe -->
+    <link rel="stylesheet" href="hope.css">
+    <link rel="stylesheet" href="root.css">
+    <link rel="stylesheet" href="rings.css">
+    <link rel="stylesheet" href="face.css">
+</head>
+<body class=" ">
+
+    <div class="hud-matrix-layer  " id="hope-grid-anchor">
+        <div class="encre">
+        <!-- Le Noyau Sensoriel (La Bulle hope) -->
+        <div class="hope-bubble-container" id="hope-bubble">
+            <div class="hope-ring1"></div>
+            <div class="hope-ring2"></div>
+            <div class="hope-ring3"></div>
+            <div class="hope-ring4"></div>
+            <div class="hope-core-essence" id="hope-essence">
+                <!-- Calque Avatar Holographique Interne -->
+               <div id="hope-visual-avatar" class="hope-visual-avatar"></div>
+                <!-- Fréquences Égaliseurs Audio -->
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+            </div>
+        </div>
+        </div>
+ </div>
+ <div class="hub  ">
+    <!-- ==========================================
+         PÉTALE 1 : NORD-OUEST (HDO CORE & INFOS)
+         La croix est en bas à droite (Case 9)
+         ========================================== -->
+    <div id="hdo-hub-grid-1" class="hub-grid" style="display: none;">
+        <a href="https://lucassporki.github.io/PROTOCOLE_ALICE_HOPE_CORE/" target="_blank" class="hub-item">📱HDO CORE</a>
+        <a href="https://stoker-porki.vercel.app/" target="_blank" class="hub-item" id="hub-inventory-1">⚔️MAJOR GEAR</a>
+        <div class="hub-item">📡SCAN AREA</div>
+        <div class="hub-item">💾LOGS V1</div>
+        <div class="hub-item"></div>
+        <div class="hub-item">🛡️WALL ALPHA</div>
+        <div class="hub-item">☣️ANTIVIRUS</div>
+        <div class="hub-item">🔮ECHO ALICE</div>
+        <div class="hub-close" id="hub-close-btn-1">❌</div>
+    </div>
+
+    <!-- ==========================================
+         PÉTALE 2 : NORD-EST (TACTIQUE & ARMEMENT)
+         La croix est en bas à gauche (Case 7)
+         ========================================== -->
+    <div id="hdo-hub-grid-2" class="hub-grid2" style="display: none;">
+        <div class="hub-item">⚡PLASMA CHARGE</div>
+        <div class="hub-item">🔋MIOLJNIR CELL</div>
+        <div class="hub-item">🎯HUD OVERSIGHT</div>
+        <div class="hub-item">📟FREQ CRYPT</div>
+        <div class="hub-item">🛰️ORBITAL LINK</div>
+        <div class="hub-item">💥OVERDRIVE</div>
+        <div class="hub-item">🔫GBBR DIAG</div>
+        <div class="hub-item">🔭SNIPER OPTIC</div>
+        <div class="hub-close" id="hub-close-btn-2">❌</div>
+    </div>
+
+    <!-- ==========================================
+         PÉTALE 3 : SUD-EST (MATRICE & LOGIQUE CRYPTO)
+         La croix est en haut à gauche (Case 1)
+         ========================================== -->
+    <div id="hdo-hub-grid-3" class="hub-grid3" style="display: none;">
+        <div class="hub-item">📊MARKET SCAN</div>
+        <div class="hub-item">🪙BTC ANCHOR</div>
+        <div class="hub-item">🗝️PRIVATE KEY</div>
+        <div class="hub-item">🧬QUANT NODE</div>
+        <div class="hub-item">🔢ALGORITHM</div>
+        <div class="hub-item">🌀GEOMETRY 3D</div>
+        <div class="hub-item">⏳LOOP TIME</div>
+        <div class="hub-item">🚪EXIT ROUTINE</div>
+        <div class="hub-close" id="hub-close-btn-3">❌</div>
+    </div>
+
+    <!-- ==========================================
+         PÉTALE 4 : SUD-WEST (ARCHIVES & SPECTRES)
+         La croix est en haut à droite (Case 3)
+         ========================================== -->
+    <div id="hdo-hub-grid-4" class="hub-grid4" style="display: none;">
+        <div class="hub-item">🪦 GRAVE LOGS</div>
+        <div class="hub-item">🗑️ CORBEILLE SYSTEM</div>
+        <div class="hub-item">🩸 PULSE CORE</div>
+        <div class="hub-item">🕯️ MEMORY FLAME</div>
+        <div class="hub-item">🔗 ARG METADATA</div>
+        <div class="hub-item">🗺️ MAP OVERLAY</div>
+        <div class="hub-item">🎭 CALQUE DEV</div>
+        <div class="hub-item">🖤 SPECTRE ALIVE</div>
+        <div class="hub-close" id="hub-close-btn-4">❌</div>
+    </div>
+</div>
+        <!-- Console de Dialogue Rétroéclairée -->
+        <div class="hope-terminal-overlay  " id="hope-terminal">
+            <div class="terminal-header">
+                <span>A.L.I.C.E // sun_24.1.9</span>
+                <span id="network-tag">STABLE</span>
+            </div>
+            <div class="terminal-output" id="hope-output-text">
+               
+                [HOPE] : Initialisation modulaire réussie, Alexander. Les fichiers HTML et CSS sont séparés. Liaison neuronale prête.
+            </div>
+            <div class="terminal-input-row">
+                <input type="text" id="user-input" placeholder="Injecter une commande..." autocomplete="off">
+                <button class="terminal-send-btn" id="send-btn">Send</button>
+            </div>
+            <div id="hdo-radio-controls" class="radio-controls" style="display: block;">
+    <!-- Bouton pour fermer/acquitter le log actuel -->
+    <button id="radio-clear-btn" class="radio-btn btn2">❌ ACQUITTER</button>
+    <!-- Bouton pour forcer le signal (Boost) -->
+    <button id="radio-vocal-btn" class="radio-btn btn3">🔊[OFF]</button>
+    <button id="radio-boost-btn" class="radio-btn btn1">📡 BOOST[OFF]</button>
+            </div>
+        </div>
+
+
+    
+    <script src="database.js"></script>
+    <script src="hope.js"></script>
+
+</html>
+
+<!-- http://127.0.0.1:5501/index.html -->
+ <!-- npm run package -->
