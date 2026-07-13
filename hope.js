@@ -112,6 +112,10 @@ async function loadAutonomousQuotes() {
 
 // Lancement global au chargement du DOM CORRIGÉ (avec async)
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. STABILISATION INITIALE : On force Electron sur une taille de départ nette
+    if (isElectron && ipcRenderer) {
+        ipcRenderer.send('resize-window', { width: 250, height: 250 }); // Mode veille par défaut
+    }
     loadAutonomousQuotes().then(async () => {
         window.startIdleGallery();
         planNextPing(); // Amorce le moteur de délai organique
@@ -273,7 +277,7 @@ function triggerInteractionHop() {
     if (isOpen) {
         sethopeState("listening");
         outputText.textContent = "[HOPE] : Écoute active en ligne. J'analyse tes requêtes, MAJOR.";
-        if (ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 450 });
+        if (ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 530 });
     } else {
         sethopeState("idle");
         userInput.value = "";
@@ -337,7 +341,7 @@ function triggerAutonomousPing() {
     terminal.classList.add('open');
     
     if (radioControls) radioControls.style.display = "flex";
-    if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 450 });
+    if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 530 });
 
     let avaliableQuotes = autonomousQuotes;
     if (isSignalBoosted) {
@@ -468,7 +472,7 @@ async function processCommand(rawInput) {
         case 'clear':
             outputText.textContent = "[HOPE] : Réinitialisation. Fermeture des quadrants.";
             Object.keys(grids).forEach(key => grids[key].style.display = "none");
-            if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 450 });
+            if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 530 });
             return;
     }
 

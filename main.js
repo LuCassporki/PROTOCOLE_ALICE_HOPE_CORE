@@ -10,7 +10,7 @@ function createHopWindow() {
     win = new BrowserWindow({
    
         width: 270,             // Taille de départ
-        height: 500,
+        height: 530,
         // CALCUL DE LA POSITION : (Largeur Écran / 2) - (Largeur Fenêtre / 2) pour centrer pile au milieu
         x: Math.floor((width / 2) - (270 / 2)), 
         y: 20, // 20 pixels par rapport au haut de l'écran
