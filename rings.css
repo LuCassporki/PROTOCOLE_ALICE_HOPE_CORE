@@ -7,17 +7,22 @@
 /* =======================================================================
    GRADUATION CINÉTIQUE ET LOGIQUE COMMUNE DES ANNEAUX (CŒUR NUCLÉAIRE)
    ======================================================================= */
+/* Injecte les variables directement sur la classe commune de tes 4 anneaux */
 .hope-ring1, .hope-ring2, .hope-ring3, .hope-ring4 {
     position: absolute;
     border-radius: 50%;
     transform-style: preserve-3d;
-    
-    /* Changement d'épaisseur pour un effet de faisceau énergétique plasma */
     border: 2px solid transparent; 
-    
-    /* Par défaut en IDLE : Mouvement lent, lueur diffuse asynchrone */
     animation-iteration-count: infinite;
     animation-timing-function: linear;
+    
+    /* Injection des variables Sheets */
+    border-top-color: var(--ring-color, currentColor) !important;
+    border-bottom-color: var(--ring-color, currentColor) !important;
+    border-left-color: var(--ring-color, currentColor) !important;
+    border-right-color: var(--ring-color, currentColor) !important;
+    filter: var(--ring-filter, drop-shadow(0 0 15px transparent)) !important;
+
     transition: border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
                 box-shadow 0.6s ease, 
                 filter 0.6s ease;
@@ -128,7 +133,7 @@
 .state-speaking .hope-ring4 { 
     border-color: transparent;
     border-left-color: var(--hdo-green) !important;
-    filter: drop-shadow(0 0 25px var(--hdo-green)) !important;
+    filter: drop-shadow(0 0 25px var(--hdo-green)) !important; 
 }
 /* Parole : accélération nette */
 .state-speaking .hope-ring1 { animation-duration: 2s, 4s !important; }

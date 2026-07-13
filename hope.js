@@ -21,7 +21,6 @@ const hubGrid = document.getElementById('hdo-hub-grid');
 const hubCloseBtn = document.getElementById('hub-close-btn');
 const hubInventory = document.getElementById('hub-inventory');
 
-
 // Variables d'état fondamentales
 let lastInteractionTime = Date.now();
 let currentMode = "idle";
@@ -36,45 +35,6 @@ let currentPingTimeout = null;
 let isMouseDown = false;
 let startTime = 0;
 let startX, startY;
-
-// Check si environnement Electron existant
-// const isElectron = typeof require !== 'undefined';
-const isElectron = typeof window !== 'undefined' && typeof window.process !== 'undefined' && window.process.versions && window.process.versions.electron && typeof require !== 'undefined';
-
-const ipcRenderer = isElectron ? require('electron').ipcRenderer : null;
-
-// Exposer la fonction de transparence au niveau global de la fenêtre
-window.electronAPI_setIgnore = (ignore) => {
-    if (isElectron) {
-        ipcRenderer.send('set-ignore-mouse', ignore);
-    }
-};
-
-// =======================================================================
-// INITIALISATION DE LA BASE DE DONNÉES (MATRICE JSON)
-// =======================================================================
-async function loadAutonomousQuotes() {
-    try {
-        const response = await fetch('quotes.json');
-        const data = await response.json();
-        // On isole et ignore les lignes de commentaires explicatives du JSON
-        autonomousQuotes = data.filter(line => !line.startsWith("//"));
-        console.log(`[HDO SYSTEM] : ${autonomousQuotes.length} flux mémoriels injectés avec succès.`);
-    } catch (error) {
-        console.error("[HDO SYSTEM] : Échec de l'interception du fichier quotes.json :", error);
-        autonomousQuotes = ["[HOPE] : Liaison synaptique stable. Capsule opérationnelle."];
-    }
-}
-
-// Lancement global au chargement du DOM
-document.addEventListener('DOMContentLoaded', () => {
-    loadAutonomousQuotes().then(() => {
-        startIdleGallery();
-        planNextPing(); // Amorce le moteur de délai organique
-        // On réveille le dictionnaire de commandes
-    chargerOpsCmdDepuisSheets();
-    });
-});
 
 // =======================================================================
 // CONFIGURATION DE LA BANQUE D'IMAGES (ALICE & HOPE VISUALS)
@@ -109,56 +69,154 @@ function changeAvatarImage(url) {
     }
 }
 
-function startIdleGallery() {
+// Force la fonction à être visible partout dans l'application
+window.startIdleGallery = function() {
     if (idleInterval) return; 
     changeAvatarImage(idleImages[currentIdleIndex]);
     idleInterval = setInterval(() => {
         currentIdleIndex = (currentIdleIndex + 1) % idleImages.length;
         changeAvatarImage(idleImages[currentIdleIndex]);
-    }, 30000); // 10 minutes par fragment d'avatar
-}
+    }, 30000);
+};
 
 function stopIdleGallery() {
     clearInterval(idleInterval);
     idleInterval = null;
 }
 
+// Check si environnement Electron existant
+const isElectron = typeof window !== 'undefined' && typeof window.process !== 'undefined' && window.process.versions && window.process.versions.electron && typeof require !== 'undefined';
+const ipcRenderer = isElectron ? require('electron').ipcRenderer : null;
+
+// Exposer la fonction de transparence au niveau global de la fenêtre
+window.electronAPI_setIgnore = (ignore) => {
+    if (isElectron) {
+        ipcRenderer.send('set-ignore-mouse', ignore);
+    }
+};
+
+// =======================================================================
+// INITIALISATION DE LA BASE DE DONNÉES (MATRICE JSON)
+// =======================================================================
+async function loadAutonomousQuotes() {
+    try {
+        const response = await fetch('quotes.json');
+        const data = await response.json();
+        autonomousQuotes = data.filter(line => !line.startsWith("//"));
+        console.log(`[HDO SYSTEM] : ${autonomousQuotes.length} flux mémoriels injectés avec succès.`);
+    } catch (error) {
+        console.error("[HDO SYSTEM] : Échec de l'interception du fichier quotes.json :", error);
+        autonomousQuotes = ["[HOPE] : Liaison synaptique stable. Capsule opérationnelle."];
+    }
+}
+
+// Lancement global au chargement du DOM CORRIGÉ (avec async)
+document.addEventListener('DOMContentLoaded', () => {
+    loadAutonomousQuotes().then(async () => {
+        window.startIdleGallery();
+        planNextPing(); // Amorce le moteur de délai organique
+        
+        // --- SYNCHRONISATION INITIALE DES DEUX ONGLETS ---
+        await Promise.all([
+            chargerOpsCmdDepuisSheets(),   // Charge l'onglet des commandes
+            chargerOpsStatesDepuisSheets() // OBLIGATOIRE : Charge ton onglet des états visuels !
+        ]);
+    });
+});
+
 // =======================================================================
 // SYSTEM STATE MANAGER (MATRICE DES ÉTATS)
 // =======================================================================
 function sethopeState(mode) {
     currentMode = mode;
-    anchor.classList.remove('state-listening', 'state-thinking', 'state-speaking', 'state-panique');
-    essence.classList.remove('speaking');
-
+    
+    // 1. GESTION DU MODE IDLE NATIF (Géré par le code)
     if (mode === "idle") {
-        netTag.textContent = "STABLE"; netTag.style.color = "#00f0ff";
-        startIdleGallery();
-    } 
-    else {
-        stopIdleGallery();
+        netTag.textContent = "STABLE"; 
+        netTag.style.color = "#00f0ff";
         
-        if (stateImages[mode]) {
-            changeAvatarImage(stateImages[mode]);
-        }
-
-        if (mode === "listening") {
-            anchor.classList.add('state-listening');
-        } 
-        else if (mode === "thinking") {
-            anchor.classList.add('state-thinking');
-            netTag.textContent = "PROCESSING"; netTag.style.color = "#ffea00";
-        } 
-        else if (mode === "speaking") {
-            anchor.classList.add('state-speaking');
-            essence.classList.add('speaking');
-            netTag.textContent = "LIVE"; netTag.style.color = "#00bf33";
-        }
-        else if (mode === "panique") {
-            anchor.classList.add('state-panique');
-            netTag.textContent = "ALERT"; netTag.style.color = "#ff0000";
-        }
+        // Réinitialisation des variables CSS aux valeurs de veille
+        document.documentElement.style.setProperty('--essence-bg', 'linear-gradient(135deg, #00f0ff 0%, #440099 100%)');
+        document.documentElement.style.setProperty('--essence-shadow', '0 0 30px rgba(0, 240, 255, 0.2)');
+        document.documentElement.style.setProperty('--essence-morph-speed', '3s');
+        document.documentElement.style.setProperty('--essence-scale', 'scale(1)');
+        document.documentElement.style.setProperty('--ring-color', '');
+        document.documentElement.style.setProperty('--ring-filter', 'drop-shadow(0 0 15px transparent)');
+        document.documentElement.style.setProperty('--avatar-opacity', '1');
+        document.documentElement.style.setProperty('--avatar-filter', 'drop-shadow(0 0 0px transparent)');
+        document.documentElement.style.setProperty('--avatar-scale', 'scale(1)');
+        
+        essence.classList.remove('speaking');
+        window.startIdleGallery();
+        return;
     }
+
+    // 2. GESTION DES ÉTATS DYNAMIQUES VIA GOOGLE SHEETS
+    stopIdleGallery();
+    
+    // Sécurité au cas où dictionnaireEtats n'est pas encore initialisé
+    if (typeof dictionnaireEtats === 'undefined' || dictionnaireEtats.length === 0) {
+        console.warn(`[HDO SYSTEM] : Matrice indisponible. Repli temporaire sur l'état "${mode}".`);
+        document.documentElement.style.setProperty('--ring-color', '#00f0ff');
+        return;
+    }
+
+    const config = dictionnaireEtats.find(e => e.name === mode.trim().toLowerCase());
+
+    if (!config) {
+        console.warn(`[HDO SYSTEM] : L'état "${mode}" n'est pas encore disponible dans le dictionnaire.`);
+        document.documentElement.style.setProperty('--ring-color', '#00f0ff');
+        return;
+    }
+
+    // --- MISE À JOUR VISUELLE (CORE & ANNEAUX) ---
+    document.documentElement.style.setProperty('--ring-color', config.ringColor);
+    document.documentElement.style.setProperty('--ring-filter', `drop-shadow(0 0 25px ${config.ringColor})`);
+    
+    document.documentElement.style.setProperty('--essence-bg', `linear-gradient(135deg, ${config.auraColor} 0%, #100020 100%)`);
+    document.documentElement.style.setProperty('--essence-shadow', `0 0 40px ${config.auraColor}`);
+    document.documentElement.style.setProperty('--essence-morph-speed', config.pulseSpeed);
+
+    // --- INTERFACE AUDIO SPECTRUM ---
+    if (mode === "speaking") {
+        essence.classList.add('speaking');
+    } else {
+        essence.classList.remove('speaking');
+    }
+
+    // --- CONFIGURATION DU TEXTE D'ALERTE LATÉRAL (netTag) ---
+    if (config.alertStyle) {
+        netTag.textContent = config.alertStyle.toUpperCase();
+    }
+    if (config.alertColor) {
+        netTag.style.color = config.alertColor;
+    }
+
+    // --- GESTION DU VISAGE D'ALICE (AVATAR) ---
+    if (config.imageName) {
+        changeAvatarImage(`media/hope/${config.imageName}`);
+    }
+
+    // Application des micro-ajustements d'échelle basés sur l'état
+    if (mode === "listening") {
+        document.documentElement.style.setProperty('--avatar-opacity', '0.75');
+        document.documentElement.style.setProperty('--avatar-scale', 'scale(1.02)');
+        document.documentElement.style.setProperty('--essence-scale', 'scale(1.08)');
+    } else if (mode === "thinking") {
+        document.documentElement.style.setProperty('--avatar-opacity', '0.85');
+        document.documentElement.style.setProperty('--avatar-scale', 'scale(0.98)');
+        document.documentElement.style.setProperty('--essence-scale', 'scale(1)');
+    } else if (mode === "speaking") {
+        document.documentElement.style.setProperty('--avatar-opacity', '0.85');
+        document.documentElement.style.setProperty('--avatar-scale', 'scale(1.05)');
+        document.documentElement.style.setProperty('--essence-scale', 'scale(1)');
+    } else if (mode === "panique") {
+        document.documentElement.style.setProperty('--avatar-opacity', '1');
+        document.documentElement.style.setProperty('--avatar-scale', 'scale(1.1)');
+        document.documentElement.style.setProperty('--essence-scale', 'scale(0.95)');
+    }
+
+    console.log(`[HDO MATRIX] : Statut réorienté vers [${mode.toUpperCase()}] depuis le Cloud.`);
 }
 
 // =======================================================================
@@ -204,7 +262,7 @@ function triggerInteractionHop() {
         if (hubGrid) hubGrid.style.display = "none";
         if (radioControls) radioControls.style.display = "auto";
         if (ipcRenderer) ipcRenderer.send('resize-window', { width: 250, height: 250 });
-        startIdleGallery();
+        window.startIdleGallery();
     }
 }
 
@@ -215,7 +273,6 @@ function speakMatrixLog(text) {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
 
-    // Nettoyage des balises pour une lecture fluide
     let cleanText = text
         .replace(/\[HOPE\] 'Interception.*?' :/g, 'Interception.')
         .replace(/\[INTERCEPTION DIALOGUE\]/g, 'Alerte flux croisé.')
@@ -225,7 +282,7 @@ function speakMatrixLog(text) {
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = 'fr-FR'; 
     utterance.pitch = 1;    
-    utterance.rate = 1.8;     
+    utterance.rate = 1.8;    
 
     window.speechSynthesis.speak(utterance);
 }
@@ -329,7 +386,6 @@ async function processCommand(rawInput) {
     lastInteractionTime = Date.now();
     const cleanCmd = command.toLowerCase();
     
-    // Récupération des 4 grilles HTML
     const grids = {
         1: document.getElementById('hdo-hub-grid-1'),
         2: document.getElementById('hdo-hub-grid-2'),
@@ -337,23 +393,18 @@ async function processCommand(rawInput) {
         4: document.getElementById('hdo-hub-grid-4')
     };
 
-    // 1. DÉTECTION DES COMMANDES SYSTÈMES ET REFRESH DE LA DATA SHEETS
     if (cleanCmd.startsWith('hub') || cleanCmd === 'hub') {
         sethopeState("thinking");
         outputText.textContent = "[HDO CLOUD] : Synchronisation des fréquences avec le Sheets maître...";
         
-        // Synchronisation simultanée des boutons du Hub ET du dictionnaire de commandes
         await Promise.all([
             syncFlowerFromSheets(),
-            chargerOpsCmdDepuisSheets()
+            chargerOpsCmdDepuisSheets(),
+            chargerOpsStatesDepuisSheets()
         ]);
-
-        // On force la relecture des 36 boutons du Hub ET on recharge ton dictionnaire Ops_CMD
         await syncFlowerFromSheets(); 
-        // await chargerOpsCmdDepuisSheets(); // Ta fonction pour recharger l'onglet Ops_CMD
     }
 
-    // 2. GESTION DES COMMANDES SYSTÈMES (Structurelles en dur)
     switch(cleanCmd) {
         case 'hub1': case 'hub2': case 'hub3': case 'hub4':
             const targetIndex = cleanCmd.replace('hub', '');
@@ -369,9 +420,7 @@ async function processCommand(rawInput) {
         case 'hub':
             sethopeState("speaking");
             outputText.textContent = "[HOPE] : MATRICE HUB INITIALISÉE. Déploiement global de la structure géométrique.";
-            
             Object.keys(grids).forEach(key => grids[key].style.display = "grid");
-            
             if (ipcRenderer) ipcRenderer.send('resize-window', { width: 700, height: 950 });
             return;
             
@@ -387,53 +436,46 @@ async function processCommand(rawInput) {
             return;
     }
 
-    // 3. FILTRE ET INTERPRÉTATION DYNAMIQUE (Google Sheets : Ops_CMD)
-    // On cherche si le mot-clé existe dans l'onglet Ops_CMD retranscrit en mémoire
-    const cmdSheets = dictionnaireCommandes.find(c => c.keyword === cleanCmd);
+    if (typeof dictionnaireCommandes !== 'undefined') {
+        const cmdSheets = dictionnaireCommandes.find(c => c.keyword === cleanCmd);
 
-    if (cmdSheets) {
-   // --- PHASE 1 : LA RÉFLEXION (Instantanée) ---
-        sethopeState("thinking");
-        outputText.textContent = `[Analyse] : Traitement de la directive "${command}"...`;
+        if (cmdSheets) {
+            sethopeState("thinking");
+            outputText.textContent = `[Analyse] : Traitement de la directive "${command}"...`;
 
-        // --- PHASE 2 : LA PAROLE (Après 1.2 seconde) ---
-        setTimeout(() => {
-            // Applique l'état émotionnel spécifique du Sheets (ou speaking par défaut)
-            if (cmdSheets.state_hop) {
-                sethopeState(cmdSheets.state_hop);
-            } else {
-                sethopeState("speaking");
-            }
-            
-            // Affiche sa réponse personnalisée (ex: "Bonne écoute, Alexander.")
-            outputText.textContent = cmdSheets.responseText || `[HOPE] : Directive validée.`;
-
-            // --- PHASE 3 : L'ACTION (Après 2.2 secondes de lecture) ---
             setTimeout(() => {
-                if (cmdSheets.type === 'link') {
-                    window.open(cmdSheets.payload, '_blank');
-                } 
-                else if (cmdSheets.type === 'function') {
-                    if (typeof window[cmdSheets.payload] === "function") {
-                        window[cmdSheets.payload]();
-                    } else {
-                        outputText.textContent = `[ERREUR] : La fonction "${cmdSheets.payload}" est introuvable.`;
-                    }
+                if (cmdSheets.state_hop) {
+                    sethopeState(cmdSheets.state_hop);
+                } else {
+                    sethopeState("speaking");
                 }
+                
+                outputText.textContent = cmdSheets.responseText || `[HOPE] : Directive validée.`;
 
-                // --- PHASE 4 : LE RETOUR AU CALME (Après exécution) ---
                 setTimeout(() => {
-                    sethopeState(terminal.classList.contains('open') ? "listening" : "idle");
-                }, 2000);
+                    if (cmdSheets.type === 'link') {
+                        window.open(cmdSheets.payload, '_blank');
+                    } 
+                    else if (cmdSheets.type === 'function') {
+                        if (typeof window[cmdSheets.payload] === "function") {
+                            window[cmdSheets.payload]();
+                        } else {
+                            outputText.textContent = `[ERREUR] : La fonction "${cmdSheets.payload}" est introuvable.`;
+                        }
+                    }
 
-            }, 2200); // Temps de lecture de la phrase avant l'ouverture du lien/action
+                    setTimeout(() => {
+                        sethopeState(terminal.classList.contains('open') ? "listening" : "idle");
+                    }, 2000);
 
-        }, 1200); // Temps de réflexion initial
+                }, 2200);
 
-        return; // Coupe le reste du script
+            }, 1200);
+
+            return;
+        }
     }
 
-    // 4. TRAITEMENT D'UN TEXTE CLASSIQUE (Repli si le mot-clé n'existe nulle part)
     sethopeState("thinking");
     outputText.textContent = `[Analyse] : Traitement de la commande en cours...`;
 
@@ -447,7 +489,6 @@ async function processCommand(rawInput) {
     }, 1200);
 }
 
-// Gestionnaire d'actions natives appelées depuis les boutons du HUB
 function processNativeAction(actionName) {
     if (actionName === "force_cloud_sync") {
         sethopeState("thinking");
@@ -458,11 +499,8 @@ function processNativeAction(actionName) {
             outputText.textContent = "[HDO SYSTEM] : Alignement terminé. Tous les quadrants sont à jour.";
         });
     }
-    // Tu pourras rajouter tes autres fonctions ici (lancer de la musique, lever les boucliers...)
 }
-// =======================================================================
-// ÉCOUTEURS DES BOUTONS DE FERMETURE DES PÉTALES
-// =======================================================================
+
 for (let i = 1; i <= 4; i++) {
     const closeBtn = document.getElementById(`hub-close-btn-${i}`);
     if (closeBtn) {
@@ -471,7 +509,6 @@ for (let i = 1; i <= 4; i++) {
             if (grid) grid.style.display = "none";
             outputText.textContent = `[HOPE] : Déconnexion du quadrant ${i}.`;
             
-            // Si toutes les grilles sont fermées, on repasse en mode minimal
             const anyOpen = Object.keys([1,2,3,4]).some(k => document.getElementById(`hdo-hub-grid-${parseInt(k)+1}`).style.display === "grid");
             if (!anyOpen) {
                 sethopeState("idle");
@@ -481,7 +518,6 @@ for (let i = 1; i <= 4; i++) {
     }
 }
 
-// Écouteurs pour la validation de saisie du Major
 sendBtn.addEventListener('click', () => {
     processCommand(userInput.value);
     userInput.value = "";
@@ -494,9 +530,6 @@ userInput.addEventListener('keypress', (e) => {
     }
 });
 
-// =======================================================================
-// ACTIONS DES TOUCHES DU HUB TACTIQUE
-// =======================================================================
 if (hubCloseBtn) {
     hubCloseBtn.addEventListener('click', () => {
         if (hubGrid) hubGrid.style.display = "none";
@@ -512,29 +545,18 @@ if (hubInventory) {
     });
 }
 
-// =======================================================================
-// DÉTECTION SÉCURISÉE MULTI-PLATEFORME (PC ELECTRON VS MOBILE WEB)
-// =======================================================================
-// const isElectron = typeof window !== 'undefined' && typeof window.process !== 'undefined' && window.process.versions && window.process.versions.electron;
-// const isElectron = typeof require !== 'undefined';
 function syncWindowSizeToContent() {
-    // SÉCURITÉ MOBILE : Si on est sur téléphone (navigateur standard), on n'envoie pas d'ordre à Electron
     if (!isElectron) {
         console.log("[HDO MOBILE] : Mode web actif. Redimensionnement Electron ignoré.");
         return; 
     }
 
-    // Petite temporisation pour laisser le temps au DOM et au CSS de se positionner
     setTimeout(() => {
         const currentWidth = document.body.scrollWidth + 20;
         const currentHeight = document.body.scrollHeight + 20;
-
         console.log(`[HDO AUTO-RESIZE] : Ajustement de la capsule -> ${currentWidth}x${currentHeight}px`);
-        
-        // Sécurité supplémentaire pour éviter le crash si ipcRenderer n'est pas instancié
         if (typeof ipcRenderer !== 'undefined') {
             ipcRenderer.send('resize-window', { width: currentWidth, height: currentHeight });
         }
     }, 50);
 }
-
