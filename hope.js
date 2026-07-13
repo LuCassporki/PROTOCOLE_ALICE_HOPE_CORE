@@ -145,8 +145,14 @@ function sethopeState(mode) {
         document.documentElement.style.setProperty('--avatar-opacity', '1');
         document.documentElement.style.setProperty('--avatar-filter', 'drop-shadow(0 0 0px transparent)');
         document.documentElement.style.setProperty('--avatar-scale', 'scale(1)');
+
+        // Nettoyage des styles forcés sur les anneaux pour revenir aux valeurs de ring.css
+        for (let i = 1; i <= 4; i++) {
+            const ring = document.querySelector(`.hope-ring${i}`);
+            if (ring) ring.style.animationDuration = "12s, 15s";
+        }
         
-        essence.classList.remove('speaking');
+        essence.classList.remove('active-signal');
         window.startIdleGallery();
         return;
     }
@@ -176,6 +182,18 @@ function sethopeState(mode) {
     document.documentElement.style.setProperty('--essence-bg', `linear-gradient(135deg, ${config.auraColor} 0%, #100020 100%)`);
     document.documentElement.style.setProperty('--essence-shadow', `0 0 40px ${config.auraColor}`);
     document.documentElement.style.setProperty('--essence-morph-speed', config.pulseSpeed);
+
+    // 🔥 LE CORRECTIF : Application de la vitesse de rotation aux 4 anneaux
+    for (let i = 1; i <= 4; i++) {
+        const ring = document.querySelector(`.hope-ring${i}`);
+        if (ring && config.ringRotation) {
+            // Ton CSS utilise deux animations (corePulse et ringRotationZ).
+            // La deuxième valeur (ex: 4s, 5s) gère la vitesse de rotation sur l'axe Z.
+            // On conserve la pulsation de l'index et on injecte ta vitesse dynamique du Sheets !
+            const pulseDuration = (i % 2 === 0) ? "2s" : "4s";
+            ring.style.animationDuration = `${pulseDuration}, ${config.ringRotation}`;
+        }
+    }
 
     // --- INTERFACE AUDIO SPECTRUM ---
     if (mode === "speaking") {
@@ -282,7 +300,25 @@ function speakMatrixLog(text) {
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = 'fr-FR'; 
     utterance.pitch = 1;    
-    utterance.rate = 1.8;    
+    utterance.rate = 1.8;  
+    
+    // 🔥 CONNEXION AU FLUX SENSORIEL REEL
+    const essenceCentrale = document.getElementById('hope-essence');
+
+    // Dès que le son sort des haut-parleurs : on active les barres
+    utterance.onstart = () => {
+        if (essenceCentrale) essenceCentrale.classList.add('active-signal');
+    };
+
+    // Dès que la phrase est finie ou coupée : on fige les barres
+    utterance.onend = () => {
+        if (essenceCentrale) essenceCentrale.classList.remove('active-signal');
+    };
+
+    // Sécurité si la synthèse vocale rencontre une erreur ou est interrompue abruptement
+    utterance.onerror = () => {
+        if (essenceCentrale) essenceCentrale.classList.remove('active-signal');
+    };
 
     window.speechSynthesis.speak(utterance);
 }

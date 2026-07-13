@@ -13,32 +13,6 @@ window.chargerOpsStatesDepuisSheets = async function() {
     }
 };
 
-// function parseCSVToEtats(csvText) {
-//     const lignes = csvText.split('\n');
-//     const resultat = [];
-
-// console.log("[DEBUG SHEETS] Lignes brutes reçues de Google :", lignes);
-
-//     for (let i = 1; i < lignes.length; i++) {
-//         if (!lignes[i].trim()) continue;
-
-//         // const col = lignes[i].split(',');
-//         const col = lignes[i].split(',').map(cellule => cellule.replace(/["']/g, "").trim());
-
-//         resultat.push({
-//         name: col[0]?.trim().toLowerCase(),         // Colonne A (Ex: listening)
-//             ringColor: col[1]?.trim(),                 // Colonne B (Ex: #ff007f)
-//             auraColor: col[2]?.trim(),                 // Colonne C
-//             pulseSpeed: col[3]?.trim(),                // Colonne D
-//             ringRotation: col[4]?.trim(),              // Colonne E
-//             alertStyle: col[5]?.trim(),                // Colonne F
-//             alertColor: col[6]?.trim(),                // Colonne G
-//             imageName: col[7]?.trim()                  // Colonne H
-//         });
-//     }
-//     console.log("[DEBUG SHEETS] Tableau dictionnaireEtats finalisé :", resultat);
-//     return resultat;
-// }
 
 function parseCSVToEtats(csvText) {
     const lignes = csvText.split('\n');

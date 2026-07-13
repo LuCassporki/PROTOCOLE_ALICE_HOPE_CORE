@@ -88,50 +88,27 @@ body {
     transform: scaleY(0.1); 
     z-index: 2;
     transition: transform 0.3s ease, background 0.3s;
-    display: none !important;
+    display: none;
+}
+.hope-core-essence.active-signal .audio-bar { 
+    display: inline-block; 
+    animation: hdoAudioPulse 0.25s infinite alternate ease-in-out; 
 }
 
-/* Génération des cycles de pulsations audio */
-.hope-core-essence.speaking .audio-bar { animation: hdoAudioPulse 0.4s infinite alternate ease-in-out; }
-.hope-core-essence.speaking .audio-bar:nth-child(1) { animation-delay: 0.1s; }
-.hope-core-essence.speaking .audio-bar:nth-child(2) { animation-delay: 0.3s; }
-.hope-core-essence.speaking .audio-bar:nth-child(3) { animation-delay: 0.0s; }
-.hope-core-essence.speaking .audio-bar:nth-child(4) { animation-delay: 0.4s; }
+/* 🔥 LE CORRECTIF : On cible les .audio-bar enfants de l'essence active */
+.hope-core-essence.active-signal .audio-bar:nth-child(1) { animation-delay: 0.1s !important; }
+.hope-core-essence.active-signal .audio-bar:nth-child(2) { animation-delay: 0.3s !important; }
+.hope-core-essence.active-signal .audio-bar:nth-child(3) { animation-delay: 0.05s !important; }
+.hope-core-essence.active-signal .audio-bar:nth-child(4) { animation-delay: 0.4s !important; }
 
 /* =======================================================================
-   REGION 4 : GESTIONNAIRE CHROMATIQUE DES ETATS (MUTATIONS SPATIALES)
+   REGION 4 : GESTIONNAIRE CHROMATIQUE DES ETATS (MUTATIONS SPATIALES
    ======================================================================= */
-/* Écoute Active [Listening] (Rose Flash) */
-.state-listening .hope-core-essence {
-    background: linear-gradient(135deg, var(--hdo-pink, #ff007f) 0%, #300060) !important;
-    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 40px var(--hdo-pink, #ff007f);
-    transform: scale(1.08);
-    animation: hopeMorphing 6s infinite ease-in-out alternate;
-}
 
-/* Analyse / Réflexion [Thinking] (Or Cyber) */
-.state-thinking .hope-core-essence {
-    background: linear-gradient(135deg, var(--hdo-gold, #ffb700) 0%, #440099) !important;
-    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 45px var(--hdo-gold, #ffb700);
-    animation: hopeMorphing 2s infinite ease-in-out alternate;
-}
+/* Étape 1 : Si Hop est en mode vocal, on rend les barres visibles (statiques) */
 
-/* Parole Active [Speaking] (Vert Major) */
-.state-speaking .hope-core-essence {
-    background: linear-gradient(135deg, var(--hdo-green, #00bf33) 0%, #00220a) !important;
-    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 35px var(--hdo-green, #00bf33);
-    animation: hopeMorphing 1s infinite ease-in-out alternate;
-}
-.state-speaking .audio-bar { 
-    display: inline-block !important; 
-}
 
-/* Protocole d'Urgence [Panique] (Rouge Sang / Alerte) */
-.state-panique .hope-core-essence {
-    background: linear-gradient(135deg, var(--hdo-blood, #ff0000) 0%, #200000) !important;
-    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 45px var(--hdo-blood, #ff0000);
-    animation: hopeMorphing 0.5s infinite ease-in-out alternate;
-}
+
 
 /* =======================================================================
    REGION 5 : CONSOLE OVERLAY (TERMINAL TACTIQUE & LOGS)
@@ -271,7 +248,7 @@ body {
 }
 .hub-close:hover {
     background: rgba(255, 0, 0, 0.3) !important;
-    border-color: #ff3b30 !important;
+    border-color: #ff3a30 !important;
     box-shadow: 0 0 8px rgba(255, 0, 0, 0.6) !important;
 }
 
@@ -284,6 +261,6 @@ body {
     100% { border-radius: 50% 50% 65% 35% / 40% 55% 45% 60%; }
 }
 @keyframes hdoAudioPulse {
-    0% { transform: scaleY(0.2); }
-    100% { transform: scaleY(2); }
+    0% { transform: scaleY(0.1); }
+    100% { transform: scaleY(1.5); }
 }

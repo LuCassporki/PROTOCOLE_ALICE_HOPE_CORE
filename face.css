@@ -17,25 +17,3 @@
 
     transition: background-image 0.8s ease-in-out, opacity 0.5s ease, filter 0.5s ease, transform 0.4s ease;
 }
-
-/* --- ÉTATS D'INTERACTION SYNCHRONISÉS --- */
-
-/* 1. Écoute Active (Listening) */
-.state-listening .hope-visual-avatar { 
-    opacity: 0.75; 
-    transform: scale(1.02);
-}
-
-/* 2. Analyse / Réflexion (Thinking) */
-.state-thinking .hope-visual-avatar { 
-    opacity: 0.85; 
-    filter: drop-shadow(0 0 8px var(--hdo-gold));
-    transform: scale(0.98); /* Légère rétractation de concentration */
-}
-
-/* 3. Parole active (Speaking) */
-.state-speaking .hope-visual-avatar { 
-    opacity: 0.85; 
-    filter: drop-shadow(0 0 12px var(--hdo-green));
-    transform: scale(1.05); /* Pulsation vers l'avant */
-}
