@@ -277,7 +277,7 @@ function triggerInteractionHop() {
     if (isOpen) {
         sethopeState("listening");
         outputText.textContent = "[HOPE] : Écoute active en ligne. J'analyse tes requêtes, MAJOR.";
-        if (ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 530 });
+        if (ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 1500 });
     } else {
         sethopeState("idle");
         userInput.value = "";
@@ -341,7 +341,7 @@ function triggerAutonomousPing() {
     terminal.classList.add('open');
     
     if (radioControls) radioControls.style.display = "flex";
-    if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 530 });
+    if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 1500 });
 
     let avaliableQuotes = autonomousQuotes;
     if (isSignalBoosted) {
@@ -454,14 +454,14 @@ async function processCommand(rawInput) {
             Object.keys(grids).forEach(key => grids[key].style.display = "none");
             if (grids[targetIndex]) grids[targetIndex].style.display = "grid";
             
-            if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 720 });
+            if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 1500 });
             return;
 
         case 'hub':
             sethopeState("speaking");
             outputText.textContent = "[HOPE] : MATRICE HUB INITIALISÉE. Déploiement global de la structure géométrique.";
             Object.keys(grids).forEach(key => grids[key].style.display = "grid");
-            if (ipcRenderer) ipcRenderer.send('resize-window', { width: 700, height: 950 });
+            if (ipcRenderer) ipcRenderer.send('resize-window', { width: 700, height: 1500 });
             return;
             
         case 'end':
@@ -472,7 +472,7 @@ async function processCommand(rawInput) {
         case 'clear':
             outputText.textContent = "[HOPE] : Réinitialisation. Fermeture des quadrants.";
             Object.keys(grids).forEach(key => grids[key].style.display = "none");
-            if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 530 });
+            if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 1500 });
             return;
     }
 
