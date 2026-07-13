@@ -367,7 +367,7 @@ radioClearBtn.addEventListener('click', () => {
     window.speechSynthesis.cancel();
     sethopeState("idle");
     terminal.classList.remove('open');
-    if (radioControls) radioControls.style.display = "none";
+    if (radioControls) radioControls.style.display = "auto";
     if (hubGrid) hubGrid.style.display = "none";
     if (ipcRenderer) ipcRenderer.send('resize-window', { width: 250, height: 250 });
     
@@ -378,7 +378,7 @@ radioClearBtn.addEventListener('click', () => {
 radioBoostBtn.addEventListener('click', () => {
     isSignalBoosted = !isSignalBoosted;
     if (isSignalBoosted) {
-        radioBoostBtn.textContent = "📡 BOOST[MAX]";
+        radioBoostBtn.textContent = "📡[MAX]";
         radioBoostBtn.style.borderColor = "var(--hdo-gold)";
         radioBoostBtn.style.color = "var(--hdo-gold)";
         if (!terminal.classList.contains('open')) {
@@ -386,9 +386,9 @@ radioBoostBtn.addEventListener('click', () => {
             triggerAutonomousPing();
         }
     } else {
-        radioBoostBtn.textContent = "📡 BOOST[OFF]";
+        radioBoostBtn.textContent = "📡[OFF]";
         radioBoostBtn.style.borderColor = "";
-        radioBoostBtn.style.color = "";
+        radioBoostBtn.style.color = "#ff0000";
     }
 });
 
@@ -397,12 +397,12 @@ radioVocalBtn.addEventListener('click', () => {
     if (isVocalEnabled) {
         radioVocalBtn.textContent = "🔊[ON  ]";
         radioVocalBtn.style.borderColor = "#00bf33"; 
-        radioVocalBtn.style.color = "#00bf33";
+        radioVocalBtn.style.color = "#0a5800";
         speakMatrixLog(outputText.textContent);
     } else {
         radioVocalBtn.textContent = "🔊[OFF]";
         radioVocalBtn.style.borderColor = "";
-        radioVocalBtn.style.color = "";
+        radioVocalBtn.style.color = "#ff0000";
         window.speechSynthesis.cancel(); 
     }
 });
@@ -480,13 +480,19 @@ async function processCommand(rawInput) {
             outputText.textContent = `[Analyse] : Traitement de la directive "${command}"...`;
 
             setTimeout(() => {
-                if (cmdSheets.state_hop) {
-                    sethopeState(cmdSheets.state_hop);
-                } else {
-                    sethopeState("speaking");
-                }
-                
-                outputText.textContent = cmdSheets.responseText || `[HOPE] : Directive validée.`;
+             if (cmdSheets.state_hop) {
+                sethopeState(cmdSheets.state_hop);
+            } else {
+                sethopeState("speaking");
+            }
+            
+            const texteReponse = cmdSheets.responseText || `[HOPE] : Directive validée.`;
+            outputText.textContent = texteReponse;
+
+            // 🔥 LE CORRECTIF : Si le bouton vocal 🔊 est sur ON, elle te parle !
+            if (isVocalEnabled) {
+                speakMatrixLog(texteReponse);
+            }
 
                 setTimeout(() => {
                     if (cmdSheets.type === 'link') {
@@ -515,9 +521,15 @@ async function processCommand(rawInput) {
     sethopeState("thinking");
     outputText.textContent = `[Analyse] : Traitement de la commande en cours...`;
 
-    setTimeout(() => {
+   setTimeout(() => {
         sethopeState("speaking");
-        outputText.textContent = `[HOPE] : Commande "${command}" compilée. Le protocole répond parfaitement.`;
+        const reponseGenerique = `[HOPE] : Commande "${command}" compilée. Le protocole répond parfaitement.`;
+        outputText.textContent = reponseGenerique;
+
+        // 🔥 LE CORRECTIF : Validation vocale sur le texte de repli
+        if (isVocalEnabled) {
+            speakMatrixLog(reponseGenerique);
+        }
 
         setTimeout(() => {
             sethopeState(terminal.classList.contains('open') ? "listening" : "idle");

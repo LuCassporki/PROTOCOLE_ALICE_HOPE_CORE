@@ -112,22 +112,41 @@
                 <input type="text" id="user-input" placeholder="Injecter une commande..." autocomplete="off">
                 <button class="terminal-send-btn" id="send-btn">Send</button>
             </div>
-            <div id="hdo-radio-controls" class="radio-controls" style="display: block;">
-    <!-- Bouton pour fermer/acquitter le log actuel -->
-    <button id="radio-clear-btn" class="radio-btn btn2">❌ ACQUITTER</button>
-    <!-- Bouton pour forcer le signal (Boost) -->
-    <button id="radio-vocal-btn" class="radio-btn btn3">🔊[OFF]</button>
-    <button id="radio-boost-btn" class="radio-btn btn1">📡 BOOST[OFF]</button>
-            </div>
+
+
+        <!-- Remplacement de ta div de contrôles radio actuelle -->
+<div id="hdo-radio-controls" class="dashboard-tactique">
+    
+    <!-- AILE GAUCHE : Gestion du Flux Linguistique et Sortie Vocale -->
+    <div class="wing wing-left">
+        <button id="radio-lang-switch-btn" class="tactical-btn arc-left-top">🌍 LANG[FR]</button>
+        <button id="radio-vocal-btn" class="tactical-btn arc-left-bottom">🔊[OFF]</button>
+    </div>
+
+    <!-- CŒUR CENTRAL : Le Déclencheur Acoustique Principal -->
+    <div class="core-hub">
+        <button id="radio-vocal-input-btn" class="core-circle-btn">
+            <span class="pulse-ring"></span>
+            🎙️
+        </button>
+    </div>
+
+    <!-- AILE DROITE : Gestion du Signal et de la Fréquence -->
+    <div class="wing wing-right">
+        <button id="radio-boost-btn" class="tactical-btn arc-right-top">📡[OFF]</button>
+        <button id="radio-clear-btn" class="tactical-btn arc-right-bottom">❌ CLEAR</button>
+    </div>
+
+</div>
         </div>
 
 
     
         <script src="hope.js"></script>
+        <script src="voielacte.js"></script>
         <script src="datacmd.js"></script>
         <script src="dataState.js"></script>
     <script src="database.js"></script>
-    <!-- <script src="voielacte.js"></script> -->
 
 </html>
 

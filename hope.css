@@ -132,7 +132,8 @@ body {
         var(--hdo-tunder) 50%,
         var(--hdo-purple) 100%
     ) !important;
-
+ box-shadow: inset 0 0 120px rgb(0, 0, 0), 0 0 5px rgb(0, 0, 0);
+ border: 1px solid rgb(255, 255, 255);
 }
 
 /* =======================================================================
@@ -168,24 +169,123 @@ body {
 }
 
 .terminal-input-row input {
-    flex: 1; background: #000; border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 5px 20px 5px 20px; padding: 10px 15px; color: #fff; font-size: 0.85rem;
+    flex: 1; background: #a3141400; border: 1px solid rgb(255, 255, 255);
+    border-radius: 5px 20px 5px 20px; padding: 10px 15px; color: #00fff2; font-size: 0.85rem;
+      box-shadow: inset 0 0 20px rgb(0, 0, 0), 0 0 20px rgb(0, 0, 0);
     outline: none; font-family: monospace;
 }
-.terminal-input-row input:focus { border-color: var(--hdo-cyan, #00f0ff); }
+.terminal-input-row input:focus { border-color: var(--hdo-black, #d9ff00); }
 
 .terminal-send-btn {
     background: transparent; border: 1px solid var(--hdo-cyan, #00f0ff); color: var(--hdo-cyan, #00f0ff);
+      box-shadow: inset 0 0 20px rgb(85, 244, 255), 0 0 20px rgb(3, 238, 255);
     border-radius: 20px 5px 20px 5px; padding: 0 18px; font-family: monospace; font-size: 0.75rem;
     cursor: pointer; text-transform: uppercase; transition: all .3s;
 }
 .terminal-send-btn:hover {
     background: rgba(0, 240, 255, 0.1); border-color: var(--hdo-gold, #ffb700); color: var(--hdo-gold, #ffb700);
+     box-shadow: inset 0 0 30px rgb(252, 255, 85), 0 0 30px rgb(238, 255, 3);
     border-radius: 5px 20px 5px 20px; font-weight: bold; 
 }
 .terminal-send-btn:active { scale: 0.9; }
 
 /* Commandes Radio intégrées au terminal */
+
+.dashboard-tactique {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(148, 67, 247, 0.247);
+    border-radius: 20px;
+    border: 1px solid rgb(255, 255, 255);
+    box-shadow: inset 0 0 30px rgb(85, 244, 255), 0 0 30px rgb(3, 238, 255);
+    backdrop-filter: blur(20px);
+    width: fit-content;
+    margin: 10px auto;
+}
+/* --- LE REACTEUR CENTRAL (🎙️ SCAN) --- */
+.core-hub {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.core-circle-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%; /* Cercle parfait */
+    background: radial-gradient(circle, #c259ff 0%, #000000c0 100%);
+    border: 2px solid  #ffffff;
+    color: var(--hdo-cyan, #00f0ff);
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgb(243, 255, 80);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
+}
+.core-circle-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+}
+/* Animation de pulsation en tâche de fond quand le scan est actif */
+.core-circle-btn:active, .core-circle-btn[style*="border-color"] {
+    background: radial-gradient(circle, #440058fd 0%, #008300d7 100%);
+    animation: corePulseGlow 1.5s infinite alternate;
+}
+/* --- LES AILES LATÉRALES (BOUTONS EN ARC APLATIS) --- */
+.wing {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+   
+}
+.tactical-btn {
+    width: 100px;
+    padding: 8px 10px;
+
+    background: rgba(148, 67, 247, 0.247);
+    border: 1px solid rgb(47, 224, 255);
+    box-shadow: inset 0 0 15px rgb(255, 251, 38), 0 0 10px #ffe448;
+
+    backdrop-filter: blur(20px);
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+.tactical-btn:hover {
+    background: rgb(0, 238, 255);
+    color: #19001f;
+    border-color: rgb(251, 255, 0);
+}
+/* Modélisation des courbures asymétriques pour épouser la forme centrale */
+.arc-left-top {
+    border-radius: 50px 5px 50px 5px; /* Arrondi prononcé à gauche */
+}
+.arc-left-bottom {
+    border-radius: 5px 50px 5px 50px;
+}
+.arc-right-top {
+    border-radius:  5px 50px 5px 50px; /* Arrondi prononcé à droite */
+}
+.arc-right-bottom {
+    border-radius:  50px 5px 50px 5px;
+}
+/* --- ANIMATIONS CINÉTIQUES --- */
+@keyframes corePulseGlow {
+    0% { box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); }
+    100% { box-shadow: 0 0 30px rgba(0, 240, 255, 0.7); }
+}
+
+
+
 .radio-controls { 
     display: flex; flex-direction: row; justify-content: space-between; gap: 5px; margin-bottom: 10px;
 }
