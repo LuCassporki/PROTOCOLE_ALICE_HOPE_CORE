@@ -1,0 +1,8 @@
+node_modules/
+/media/alicealice_fragments/
+/media/111/
+/hope-widget-win32-x64/
+/android/
+/www/
+*.apk
+*.exe

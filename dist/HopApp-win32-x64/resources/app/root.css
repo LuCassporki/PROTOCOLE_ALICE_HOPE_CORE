@@ -1,0 +1,40 @@
+:root {
+  --hdo-bg: #020204;
+  --hdo-black: #020204;
+  --hdo-cyan: #00f0ff;
+  --hdo-gold: #ffea00;
+  --hdo-panel: #0a0a12f5;
+  --hdo-white: #ffffff;
+  --hdo-green: #00bf33;
+  --hdo-major: #1b4d22;
+  --hdo-blood: #7a0505;
+  --hdo-pink: #ff007f;
+  --hdo-alice: #ff44ef;
+  --hdo-deep: #1a0033;
+  --hdo-purple: #6600ff;
+  --hdo-tunder: #ea00ff91;
+  /* opacity */
+  --hdo-bg0: #020204;
+  --hdo-black0: #020204;
+  --hdo-cyan0: #00eeff80;
+  --hdo-gold0: #ffea007e;
+  --hdo-panel0: #0a0a12f5;
+  --hdo-white0: #ffffff6c;
+  --hdo-green0: #00bf33;
+  --hdo-major0: #1b4d22;
+  --hdo-blood0: #7a0505;
+  --hdo-pink0: #ff007f;
+  --hdo-alice0: #ff44ef;
+  --hdo-deep0: #1a0033;
+  --hdo-purple0: #6600ff85;
+  --hdo-tunder0: #ea00ff91;
+}
+* {
+   border: rgba(252, 5, 5, 0) solid 1px;
+}
+
+.tst{border: solid  rgb(243, 28, 0) 3px;}
+.ok{border: solid  rgb(0, 255, 0) 3px;}
+
+/* animation: hopeMorphing 3s infinite ease-in-out alternate;
+animation: hopeRotation 25s infinite linear; */

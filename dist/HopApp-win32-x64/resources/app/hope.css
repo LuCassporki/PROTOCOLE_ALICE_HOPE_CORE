@@ -1,0 +1,287 @@
+/* =======================================================================
+   REGION 1 : MATRICE DU NOYAU CORE & CONFIGURATION FLUX (BODY)
+   ======================================================================= */
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    user-select: none; -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.encre{width: 200px; height: 200px;
+    border: solid  rgba(255, 255, 255, 0.2) .1px;
+    border-radius: 50% 50%;
+    background: transparent;
+     box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2), 0px 0px 2px rgba(0, 0, 0, 0.3);
+       -webkit-app-region: drag !important;
+    cursor: move;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+body {
+    background-color: transparent !important; /* Impératif pour l'effet hologramme */
+    width: auto;                              /* Calque automatique sur le contenu */
+    height: auto;                             /* Évite l'occupation totale de l'écran */
+    font-family: 'Segoe UI', Arial, sans-serif;
+    overflow: hidden;                         /* Masque les scrollbars Windows affreuses */
+    display: inline-block;   
+    place-items: center;            /* Permet à la vitre Electron de mesurer le HTML réel */
+}
+
+/* Ordonnancement rectiligne : les modules s'empilent proprement vers le bas */
+#hope-grid-anchor, #hope-terminal, .hub {
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* =======================================================================
+   REGION 2 : LA BULLE INTERACTIVE & ANIMATIONS CYBERNETIQUES
+   ======================================================================= */
+#hope-bubble {
+    z-index: 9999 !important;
+    cursor: pointer;
+}
+
+.hope-bubble-container {
+    position: relative; 
+    width: 100px; 
+    height: 100px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    z-index: 10;
+    -webkit-app-region: no-drag !important;
+}
+
+.hope-core-essence {
+    position: absolute; 
+    width: 120px; 
+    height: 120px;
+    background: linear-gradient(135deg, var(--hdo-tunder, #00f0ff) 0%, var(--hdo-purple, #440099) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3), 0 0 30px rgba(0, 240, 255, 0.2);
+    animation: hopeMorphing 3s infinite ease-in-out alternate;
+    transition: background 0.5s ease, box-shadow 0.5s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 5px; 
+    overflow: hidden;
+}
+
+/* =======================================================================
+   REGION 3 : BANQUE AUDIO (AUDIO SPECTRUM PULSES)
+   ======================================================================= */
+.audio-bar {
+    width: 3px; 
+    height: 16px; 
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 2px; 
+    transform: scaleY(0.1); 
+    z-index: 2;
+    transition: transform 0.3s ease, background 0.3s;
+    display: none !important;
+}
+
+/* Génération des cycles de pulsations audio */
+.hope-core-essence.speaking .audio-bar { animation: hdoAudioPulse 0.4s infinite alternate ease-in-out; }
+.hope-core-essence.speaking .audio-bar:nth-child(1) { animation-delay: 0.1s; }
+.hope-core-essence.speaking .audio-bar:nth-child(2) { animation-delay: 0.3s; }
+.hope-core-essence.speaking .audio-bar:nth-child(3) { animation-delay: 0.0s; }
+.hope-core-essence.speaking .audio-bar:nth-child(4) { animation-delay: 0.4s; }
+
+/* =======================================================================
+   REGION 4 : GESTIONNAIRE CHROMATIQUE DES ETATS (MUTATIONS SPATIALES)
+   ======================================================================= */
+/* Écoute Active [Listening] (Rose Flash) */
+.state-listening .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-pink, #ff007f) 0%, #300060) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 40px var(--hdo-pink, #ff007f);
+    transform: scale(1.08);
+    animation: hopeMorphing 6s infinite ease-in-out alternate;
+}
+
+/* Analyse / Réflexion [Thinking] (Or Cyber) */
+.state-thinking .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-gold, #ffb700) 0%, #440099) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 45px var(--hdo-gold, #ffb700);
+    animation: hopeMorphing 2s infinite ease-in-out alternate;
+}
+
+/* Parole Active [Speaking] (Vert Major) */
+.state-speaking .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-green, #00bf33) 0%, #00220a) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 35px var(--hdo-green, #00bf33);
+    animation: hopeMorphing 1s infinite ease-in-out alternate;
+}
+.state-speaking .audio-bar { 
+    display: inline-block !important; 
+}
+
+/* Protocole d'Urgence [Panique] (Rouge Sang / Alerte) */
+.state-panique .hope-core-essence {
+    background: linear-gradient(135deg, var(--hdo-blood, #ff0000) 0%, #200000) !important;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 0 45px var(--hdo-blood, #ff0000);
+    animation: hopeMorphing 0.5s infinite ease-in-out alternate;
+}
+
+/* =======================================================================
+   REGION 5 : CONSOLE OVERLAY (TERMINAL TACTIQUE & LOGS)
+   ======================================================================= */
+.hope-terminal-overlay {
+    display: block; /* Placement naturel dans la colonne du body */
+    width: 380px; 
+    
+    /* 1. Configuration des Bordures, Formes et Ombres */
+    border: 5px solid white; /* Ta bordure de test */
+    border-radius: 20px 50px 20px 20px; 
+    padding: 12px; 
+    box-shadow: 0 0px 80px rgb(251, 255, 18); /* Ta lueur jaune massive */
+    backdrop-filter: blur(12px);
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1); 
+    z-index: 5;
+    
+    /* États initiaux de fermeture (gérés par le script) */
+    opacity: 1;
+    max-height: 0;
+    overflow: hidden; /* Masque le texte et les inputs à la fermeture */
+
+    background: linear-gradient(135deg, 
+        var(--hdo-purple) 0%, 
+        var(--hdo-tunder) 50%,
+        var(--hdo-purple) 100%
+    ) !important;
+
+}
+
+/* =======================================================================
+   MOTEURS GÉOMÉTRIQUES (L'ÉVÉNEMENT D'OUVERTURE CORRIGÉ)
+   ======================================================================= */
+.hope-terminal-overlay.open { 
+    opacity: 0.95;     /* CORRIGÉ : Valeur max de 1 (0.95 pour garder une fine transparence) */
+    max-height: 500px; /* Permet le déploiement vertical fluide */
+    margin-top: 15px;
+    overflow: visible; /* CRUCIAL : Laisse l'ombre box-shadow jaune déborder et briller à l'extérieur ! */
+}
+
+
+
+.terminal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: monospace; font-size: 0.65rem; color: var(--hdo-green, #00bf33);
+    border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;
+    margin-bottom: 10px;
+}
+
+.terminal-output { 
+    font-size: 0.75rem; 
+    line-height: 1.4; 
+    color: var(--hdo-gold, #ffb700); 
+    min-height: 60px; 
+    font-family: monospace; 
+    white-space: pre-line; /* Respect scrupuleux des \n du JSON */
+}
+
+.terminal-input-row { 
+    display: flex; gap: 8px; width: 100%; margin-top: 10px; 
+}
+
+.terminal-input-row input {
+    flex: 1; background: #000; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 5px 20px 5px 20px; padding: 10px 15px; color: #fff; font-size: 0.85rem;
+    outline: none; font-family: monospace;
+}
+.terminal-input-row input:focus { border-color: var(--hdo-cyan, #00f0ff); }
+
+.terminal-send-btn {
+    background: transparent; border: 1px solid var(--hdo-cyan, #00f0ff); color: var(--hdo-cyan, #00f0ff);
+    border-radius: 20px 5px 20px 5px; padding: 0 18px; font-family: monospace; font-size: 0.75rem;
+    cursor: pointer; text-transform: uppercase; transition: all .3s;
+}
+.terminal-send-btn:hover {
+    background: rgba(0, 240, 255, 0.1); border-color: var(--hdo-gold, #ffb700); color: var(--hdo-gold, #ffb700);
+    border-radius: 5px 20px 5px 20px; font-weight: bold; 
+}
+.terminal-send-btn:active { scale: 0.9; }
+
+/* Commandes Radio intégrées au terminal */
+.radio-controls { 
+    display: flex; flex-direction: row; justify-content: space-between; gap: 5px; margin-bottom: 10px;
+}
+.radio-btn { 
+    flex: 1; font-size: .65rem; padding: 4px; margin-top: 5px; font-family: monospace; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 4px;
+}
+.btn1{background-color: var(--hdo-major); border-radius: 5px 5px 50px 50px; }
+.btn2{background-color: var(--hdo-deep); border-radius: 50px 50px 5px 5px; color: var(--hdo-alice);}
+.btn3{background-color: var(--hdo-purple); border-radius: 5px 50px 5px 50px; color: var(--hdo-blood);}
+
+
+/* =======================================================================
+   REGION 6 : LA STRUCTURE NÉON hub (QUADRANTS 3X3)
+   ======================================================================= */
+.hub {
+    background: transparent; 
+    width: 250px; 
+    height: auto; /* Laisse le flux en colonne se dimensionner */
+    position: relative;
+}
+
+.hub-grid, .hub-grid2, .hub-grid3, .hub-grid4 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    grid-gap: 0px;
+    background: linear-gradient(130deg,var(--hdo-gold0) 0%, var(--hdo-white0) 50%, var(--hdo-cyan0) 100%);
+    border: 1px solid var(--hdo-gold, #ffb700);
+    border-radius: 50px 10px 50px 10px;
+    opacity: 0.95;
+}
+
+/* Styles personnalisés pour différencier les styles géométriques des quadrants */
+
+
+.hub-item {
+    display: flex; justify-content: center; align-items: center;
+    height: 80px; width: 80px; /* S'adapte parfaitement à la colonne de sa grille */
+    background: rgba(132, 0, 255, 0.1);
+    border: 1px solid rgba(215, 94, 252, 0.4);
+    color: #f6fa00; font-family: monospace; font-size: 1rem;
+    text-align: center; cursor: pointer; text-decoration: none;
+    transition: all 0.2s ease; border-radius: 4px;
+    border-radius: 50px 40px 0px 40px;
+    box-shadow: inset 0 0 30px var(--hdo-purple);
+}
+.hub-item:hover {
+    /* background: rgba(19, 116, 0, 0.603); */
+    border-color: var(--hdo-purple0);
+    box-shadow: 0 0 30px rgb(0, 0, 0), inset 0 0 60px var(--hdo-major);
+}
+
+.hub-close {
+    background: rgba(255, 0, 0, 0.1) !important;
+    border: 1px solid rgba(30, 255, 0, 0.4) !important;
+    color: #ff3b30 !important;
+    font-weight: bold;
+    text-align: center;
+    margin: auto; font-size: 2rem;
+}
+.hub-close:hover {
+    background: rgba(255, 0, 0, 0.3) !important;
+    border-color: #ff3b30 !important;
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.6) !important;
+}
+
+/* =======================================================================
+   MOTEURS GÉOMÉTRIQUES (KEYFRAMES COMPILATION)
+   ======================================================================= */
+@keyframes hopeMorphing {
+    0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
+    50% { border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%; }
+    100% { border-radius: 50% 50% 65% 35% / 40% 55% 45% 60%; }
+}
+@keyframes hdoAudioPulse {
+    0% { transform: scaleY(0.2); }
+    100% { transform: scaleY(2); }
+}
