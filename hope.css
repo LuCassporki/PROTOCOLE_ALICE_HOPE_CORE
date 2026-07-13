@@ -144,7 +144,7 @@ body {
     z-index: 5;
     
     /* États initiaux de fermeture (gérés par le script) */
-    opacity: 1;
+    opacity: 0;
     max-height: 0;
     overflow: hidden; /* Masque le texte et les inputs à la fermeture */
 
