@@ -21,6 +21,7 @@ const hubGrid = document.getElementById('hdo-hub-grid');
 const hubCloseBtn = document.getElementById('hub-close-btn');
 const hubInventory = document.getElementById('hub-inventory');
 
+
 // Variables d'état fondamentales
 let lastInteractionTime = Date.now();
 let currentMode = "idle";
@@ -70,6 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadAutonomousQuotes().then(() => {
         startIdleGallery();
         planNextPing(); // Amorce le moteur de délai organique
+        // On réveille le dictionnaire de commandes
+    chargerOpsCmdDepuisSheets();
     });
 });
 
@@ -339,18 +342,24 @@ async function processCommand(rawInput) {
         sethopeState("thinking");
         outputText.textContent = "[HDO CLOUD] : Synchronisation des fréquences avec le Sheets maître...";
         
-        // L'action magique : on force la relecture des 36 boutons avant l'affichage
-        await syncFlowerFromSheets();
+        // Synchronisation simultanée des boutons du Hub ET du dictionnaire de commandes
+        await Promise.all([
+            syncFlowerFromSheets(),
+            chargerOpsCmdDepuisSheets()
+        ]);
+
+        // On force la relecture des 36 boutons du Hub ET on recharge ton dictionnaire Ops_CMD
+        await syncFlowerFromSheets(); 
+        // await chargerOpsCmdDepuisSheets(); // Ta fonction pour recharger l'onglet Ops_CMD
     }
 
-// 1. GESTION DES COMMANDES SYSTÈMES
+    // 2. GESTION DES COMMANDES SYSTÈMES (Structurelles en dur)
     switch(cleanCmd) {
         case 'hub1': case 'hub2': case 'hub3': case 'hub4':
             const targetIndex = cleanCmd.replace('hub', '');
             sethopeState("speaking");
             outputText.textContent = `[HOPE] : Activation du quadrant tactique ${targetIndex}.`;
             
-            // Masque tout et affiche uniquement le quadrant demandé
             Object.keys(grids).forEach(key => grids[key].style.display = "none");
             if (grids[targetIndex]) grids[targetIndex].style.display = "grid";
             
@@ -358,14 +367,11 @@ async function processCommand(rawInput) {
             return;
 
         case 'hub':
-            // COMMANDE MAÎTRESSE : Déploiement simultané des 4 quadrants
             sethopeState("speaking");
             outputText.textContent = "[HOPE] : MATRICE HUB INITIALISÉE. Déploiement global de la structure géométrique.";
             
-            // Affiche les 4 grilles en même temps
             Object.keys(grids).forEach(key => grids[key].style.display = "grid");
             
-            // On élargit massivement la vitre Electron pour afficher la fleur complète sans coupure
             if (ipcRenderer) ipcRenderer.send('resize-window', { width: 700, height: 950 });
             return;
             
@@ -381,8 +387,53 @@ async function processCommand(rawInput) {
             return;
     }
 
+    // 3. FILTRE ET INTERPRÉTATION DYNAMIQUE (Google Sheets : Ops_CMD)
+    // On cherche si le mot-clé existe dans l'onglet Ops_CMD retranscrit en mémoire
+    const cmdSheets = dictionnaireCommandes.find(c => c.keyword === cleanCmd);
 
-    // 2. Traitement d'un texte classique (Simulateur de compilation)
+    if (cmdSheets) {
+   // --- PHASE 1 : LA RÉFLEXION (Instantanée) ---
+        sethopeState("thinking");
+        outputText.textContent = `[Analyse] : Traitement de la directive "${command}"...`;
+
+        // --- PHASE 2 : LA PAROLE (Après 1.2 seconde) ---
+        setTimeout(() => {
+            // Applique l'état émotionnel spécifique du Sheets (ou speaking par défaut)
+            if (cmdSheets.state_hop) {
+                sethopeState(cmdSheets.state_hop);
+            } else {
+                sethopeState("speaking");
+            }
+            
+            // Affiche sa réponse personnalisée (ex: "Bonne écoute, Alexander.")
+            outputText.textContent = cmdSheets.responseText || `[HOPE] : Directive validée.`;
+
+            // --- PHASE 3 : L'ACTION (Après 2.2 secondes de lecture) ---
+            setTimeout(() => {
+                if (cmdSheets.type === 'link') {
+                    window.open(cmdSheets.payload, '_blank');
+                } 
+                else if (cmdSheets.type === 'function') {
+                    if (typeof window[cmdSheets.payload] === "function") {
+                        window[cmdSheets.payload]();
+                    } else {
+                        outputText.textContent = `[ERREUR] : La fonction "${cmdSheets.payload}" est introuvable.`;
+                    }
+                }
+
+                // --- PHASE 4 : LE RETOUR AU CALME (Après exécution) ---
+                setTimeout(() => {
+                    sethopeState(terminal.classList.contains('open') ? "listening" : "idle");
+                }, 2000);
+
+            }, 2200); // Temps de lecture de la phrase avant l'ouverture du lien/action
+
+        }, 1200); // Temps de réflexion initial
+
+        return; // Coupe le reste du script
+    }
+
+    // 4. TRAITEMENT D'UN TEXTE CLASSIQUE (Repli si le mot-clé n'existe nulle part)
     sethopeState("thinking");
     outputText.textContent = `[Analyse] : Traitement de la commande en cours...`;
 
@@ -390,7 +441,7 @@ async function processCommand(rawInput) {
         sethopeState("speaking");
         outputText.textContent = `[HOPE] : Commande "${command}" compilée. Le protocole répond parfaitement.`;
 
-      setTimeout(() => {
+        setTimeout(() => {
             sethopeState(terminal.classList.contains('open') ? "listening" : "idle");
         }, 3500);
     }, 1200);
@@ -461,26 +512,6 @@ if (hubInventory) {
     });
 }
 
-// =======================================================================
-// AJUSTEMENT CYBERNÉTIQUE DE LA VITRE (AUTO-RESIZE TO CONTENT)
-// =======================================================================
-
-// function syncWindowSizeToContent() {
-//     if (!isElectron) return;
-
-//     // Petite temporisation pour laisser le temps au DOM et au CSS de se positionner
-//     setTimeout(() => {
-//         // On récupère les dimensions réelles du contenu du body
-//         // On ajoute une petite marge de sécurité de 20px pour éviter les barres de défilement
-//         const currentWidth = document.body.scrollWidth + 20;
-//         const currentHeight = document.body.scrollHeight + 20;
-
-//         console.log(`[HDO AUTO-RESIZE] : Ajustement de la capsule -> ${currentWidth}x${currentHeight}px`);
-        
-//         // On envoie les dimensions exactes à main.js
-//         ipcRenderer.send('resize-window', { width: currentWidth, height: currentHeight });
-//     }, 50);
-// }
 // =======================================================================
 // DÉTECTION SÉCURISÉE MULTI-PLATEFORME (PC ELECTRON VS MOBILE WEB)
 // =======================================================================
