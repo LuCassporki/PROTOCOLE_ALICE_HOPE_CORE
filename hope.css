@@ -25,7 +25,9 @@ body {
     font-family: 'Segoe UI', Arial, sans-serif;
     overflow: hidden;                         /* Masque les scrollbars Windows affreuses */
     display: inline-block;   
-    place-items: center;            /* Permet à la vitre Electron de mesurer le HTML réel */
+    place-items: center;          
+      /* Permet à la vitre Electron de mesurer le HTML réel */
+
 }
 
 /* Ordonnancement rectiligne : les modules s'empilent proprement vers le bas */
@@ -300,11 +302,27 @@ body {
 /* =======================================================================
    REGION 6 : LA STRUCTURE NÉON hub (QUADRANTS 3X3)
    ======================================================================= */
-.hub {
+/* .hub {
     background: transparent; 
-    width: 250px; 
-    height: auto; /* Laisse le flux en colonne se dimensionner */
-    position: relative;
+    width: 250px;  */
+    /* height: auto; Laisse le flux en colonne se dimensionner */
+    /* position: relative;
+    display: grid;
+} */
+
+.hub {
+  display: grid;
+  /* 🎯 Crée 2 colonnes de taille égale (fraction) */
+  grid-template-columns: repeat(2, 1fr); 
+  /* Espace d'aération entre tes 4 blocs */
+  gap: 15px; 
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 📱 SÉCURITÉ RESPONSIVE : Si un seul élément est actif/visible */
+.hub > *:only-child {
+  grid-column: span 2; /* Il prend toute la largeur s'il est tout seul */
 }
 
 .hub-grid, .hub-grid2, .hub-grid3, .hub-grid4 {
