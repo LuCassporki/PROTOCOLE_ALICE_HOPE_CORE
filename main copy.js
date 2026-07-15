@@ -4,16 +4,18 @@ const path = require('path');
 let win; // On déclare la variable globale pour la fenêtre unique
 
 function createHopWindow() {
-    // On récupère la taille de l'écran principal de l'utilisateur
+         // On récupère la taille de l'écran principal de l'utilisateur
     const primaryDisplay = screen.getPrimaryDisplay();
     const { width } = primaryDisplay.workAreaSize;
-    
     win = new BrowserWindow({
-        width: 250,              // Taille par défaut (évite le "auto" qui fait crasher Electron)
-        height: 250,             // Taille par défaut
+   
+        // width: 270,             // Taille de départ
+        // height: 1500,
+        width: auto,             // Taille de départ
+        height: auto,
         // CALCUL DE LA POSITION : (Largeur Écran / 2) - (Largeur Fenêtre / 2) pour centrer pile au milieu
-        x: Math.floor((width / 2) - (250 / 2)), 
-        y: 100,                  // Une valeur numérique propre (évite le "50%" qui glitch sur Electron)
+        x: Math.floor((width / 2) - (300 / 2)), 
+        y: "50%", // 20 pixels par rapport au haut de l'écran
         frame: false,
         transparent: true,
         alwaysOnTop: true,
@@ -24,6 +26,8 @@ function createHopWindow() {
             contextIsolation: false
         }
     });
+
+    win.loadURL('https://lucassporki.github.io/PROTOCOLE_ALICE_HOPE_CORE/');
 
     // =======================================================================
     // LE FILTRE FANTÔME (Ignorer le vide, capturer les éléments cliquables)
@@ -48,6 +52,7 @@ function createHopWindow() {
     });
 
     // ARCHITECTURE SYNCHRONE : Charge ton déploiement GitHub Pages direct.
+    // Toute modification poussée sur GitHub sera visible instantanément sur ton PC !
     win.loadURL('https://lucassporki.github.io/PROTOCOLE_ALICE_HOPE_CORE/');
 
     win.on('focus', () => {
@@ -62,24 +67,23 @@ function createHopWindow() {
 // Liaison IPC pour le commutateur de transparence aux clics
 ipcMain.on('set-ignore-mouse', (event, ignore) => {
     if (win) {
-        // L'option { forward: true } permet à Electron de continuer à envoyer les mousemove
+        // L'option { forward: true } est indispensable : elle permet à Electron de continuer
+        // à envoyer les événements de souris (comme le mousemove) au HTML même quand on clique à travers !
         win.setIgnoreMouseEvents(ignore, { forward: true });
     }
 });
 
+// Ton écouteur de redimensionnement classique qui reste inchangé
+ipcMain.on('resize-window', (event, { width, height }) => {
+    if (win) win.setSize(width, height);
+});
+
 // =======================================================================
-// ÉCOUTEUR IPC DE REDIMENSIONNEMENT DOUBLEMENT SÉCURISÉ (UNIFIÉ)
+// ÉCOUTEUR IPC (Redimensionnement Dynamique de la Vitre Invisible)
 // =======================================================================
 ipcMain.on('resize-window', (event, { width, height }) => {
     if (win) {
-        // 1. On intercepte la position exacte de Hop AVANT le changement de taille
-        const [currentX, currentY] = win.getPosition();
-
-        // 2. On applique la nouvelle taille exigée par le state HTML
         win.setSize(width, height);
-
-        // 3. On repositionne immédiatement la fenêtre à ses coordonnées d'origine
-        win.setPosition(currentX, currentY);
     }
 });
 
