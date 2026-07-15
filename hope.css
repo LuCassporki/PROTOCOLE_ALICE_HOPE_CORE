@@ -132,7 +132,6 @@ body {
         var(--hdo-tunder) 50%,
         var(--hdo-purple) 100%
     ) !important;
- box-shadow: inset 0 0 120px rgb(0, 0, 0), 0 0 5px rgb(0, 0, 0);
  border: 1px solid rgb(255, 255, 255);
 }
 
@@ -311,9 +310,13 @@ body {
 .hub-grid, .hub-grid2, .hub-grid3, .hub-grid4 {
     display: grid;
     grid-template-columns: repeat(3, 1fr); 
-    grid-gap: 0px;
-    background: linear-gradient(130deg,var(--hdo-gold0) 0%, var(--hdo-white0) 50%, var(--hdo-cyan0) 100%);
-    border: 1px solid var(--hdo-gold, #ffb700);
+    grid-gap: 0px; 
+    background: linear-gradient(135deg, 
+        var(--hdo-purple) 0%, 
+        var(--hdo-tunder) 50%,
+        var(--hdo-purple) 100%
+    ) !important;
+ border: 1px solid rgb(255, 255, 255);
     border-radius: 50px 10px 50px 10px;
     opacity: 0.95;
 }
