@@ -250,7 +250,6 @@ window.addEventListener('mouseup', (e) => {
     
     const clickDuration = Date.now() - startTime;
     if (clickDuration < 200) {
-        triggerInteractionHop();
     }
 });
 
@@ -484,17 +483,6 @@ async function processCommand(rawInput) {
     }, 1200);
 }
 
-function processNativeAction(actionName) {
-    if (actionName === "force_cloud_sync") {
-        sethopeState("thinking");
-        outputText.textContent = "[HDO SYSTEM] : Re-calibrage manuel des flux en cours...";
-        
-        syncFlowerFromSheets().then(() => {
-            sethopeState("speaking");
-            outputText.textContent = "[HDO SYSTEM] : Alignement terminé. Tous les quadrants sont à jour.";
-        });
-    }
-}
 
 
 sendBtn.addEventListener('click', () => {
@@ -508,21 +496,3 @@ userInput.addEventListener('keypress', (e) => {
         userInput.value = "";
     }
 });
-
-
-
-function syncWindowSizeToContent() {
-    if (!isElectron) {
-        console.log("[HDO MOBILE] : Mode web actif. Redimensionnement Electron ignoré.");
-        return; 
-    }
-
-    setTimeout(() => {
-        const currentWidth = document.body.scrollWidth + 20;
-        const currentHeight = document.body.scrollHeight + 20;
-        console.log(`[HDO AUTO-RESIZE] : Ajustement de la capsule -> ${currentWidth}x${currentHeight}px`);
-        if (typeof ipcRenderer !== 'undefined') {
-            ipcRenderer.send('resize-window', { width: currentWidth, height: currentHeight });
-        }
-    }, 50);
-}
