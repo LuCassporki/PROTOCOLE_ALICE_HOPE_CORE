@@ -28,13 +28,16 @@ function createHopWindow() {
     // =======================================================================
     // LE FILTRE FANTÔME (Ignorer le vide, capturer les éléments cliquables)
     // =======================================================================
-    win.webContents.on('dom-ready', () => {
+    
+    //    event.target.id === 'hope-grid-anchor';
+
+    win.webContents.on('dom-ready', () => { 
         win.webContents.executeJavaScript(`
             window.addEventListener('mousemove', (event) => {
                 // On vérifie si la souris survole du vide ou le fond du body
                 const isOverVoid = event.target === document.documentElement || 
                                    event.target === document.body || 
-                                   event.target.id === 'hope-grid-anchor';
+                                   event.target.id === 'hope-bubble';
                 
                 if (isOverVoid) {
                     // La souris passe À TRAVERS la fenêtre

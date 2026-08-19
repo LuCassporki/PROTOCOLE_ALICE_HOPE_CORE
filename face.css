@@ -11,7 +11,7 @@
     mix-blend-mode: screen;
     
     /* Injection des variables Sheets */
-    opacity: var(--avatar-opacity, 1);
+    opacity: var(--avatar-opacity, 1); 
     filter: var(--avatar-filter, drop-shadow(0 0 0px transparent));
     transform: var(--avatar-scale, scale(1));
 

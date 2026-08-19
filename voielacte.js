@@ -143,7 +143,7 @@ class VoieLacteeEngine {
                 window.processCommand(commandToSend);
                 
                 setTimeout(() => {
-                    if (this.userInput) this.userInput.value = "";
+                    if (this.userInput) this.userInput.value = ""; 
                 }, 100);
             }
         }, this.silenceDelay);

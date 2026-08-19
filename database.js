@@ -21,7 +21,7 @@ async function fetchAndParseSheet(url) {
             headers.forEach((header, index) => {
                 rowObj[header] = line[index] ? line[index].trim() : "";
             });
-            return rowObj;
+            return rowObj; 
         });
     } catch (error) {
         console.error("[HDO NETWORK] : Échec d'interception de l'axe Sheets :", error);
@@ -29,9 +29,10 @@ async function fetchAndParseSheet(url) {
     }
 }
 
-// =======================================================================
+// ======================================================================= 
 // INJECTION DYNAMIQUE & RESPECT DU CODE NATIF
 // =======================================================================
+// extraction des donner sheets du encien hub a voir si reutilisable
 async function syncFlowerFromSheets() {
     console.log("[HDO SYSTEM] : Synchronisation des quadrants en cours...");
     const sheetData = await fetchAndParseSheet(SHEET_FLOWER_URL);

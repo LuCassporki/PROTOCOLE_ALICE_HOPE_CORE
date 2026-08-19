@@ -1,6 +1,6 @@
 // =======================================================================
 // DOM ANCHORS & CORE VARIABLES
-// =======================================================================
+// ======================================================================= 
 const anchor = document.getElementById('hope-grid-anchor');
 const essence = document.getElementById('hope-essence');
 const bubble = document.getElementById('hope-bubble');
@@ -13,12 +13,10 @@ const netTag = document.getElementById('network-tag');
 // Éléments Radio Narratifs
 const radioControls = document.getElementById('hdo-radio-controls');
 const radioClearBtn = document.getElementById('radio-clear-btn');
-const radioBoostBtn = document.getElementById('radio-boost-btn');
+const radioBoostBtn = document.getElementById('radio-boost-btn'); 
 const radioVocalBtn = document.getElementById('radio-vocal-btn');
 
 // Éléments du HUB Tactique
-const hubGrid = document.getElementById('hdo-hub-grid');
-const hubCloseBtn = document.getElementById('hub-close-btn');
 const hubInventory = document.getElementById('hub-inventory');
 
 // Variables d'état fondamentales
@@ -55,36 +53,12 @@ const idleImages = [
 let idleInterval = null;
 let currentIdleIndex = 1;
 
-// function changeAvatarImage(url) {
-//     const avatar = document.getElementById('hope-visual-avatar');
-//     if (avatar) {
-//         avatar.style.backgroundImage = `url('${url}')`;
-//     } else {
-//         console.warn("[HDO SYSTEM] : L'élément HTML '#hope-visual-avatar' est introuvable dans le DOM.");
-//     }
-// }
-
-// // Force la fonction à être visible partout dans l'application
-// window.startIdleGallery = function() {
-//     if (idleInterval) return; 
-//     changeAvatarImage(idleImages[currentIdleIndex]);
-//     idleInterval = setInterval(() => {
-//         currentIdleIndex = (currentIdleIndex + 1) % idleImages.length;
-//         changeAvatarImage(idleImages[currentIdleIndex]);
-//     }, 30000);
-// };
-
-// function stopIdleGallery() {
-//     clearInterval(idleInterval);
-//     idleInterval = null;
-// }
 
 function changeAvatarImage(url) {
     const avatar = document.getElementById('hope-visual-avatar');
     id = Math.floor(Math.random() * 110) + 1;
     if (avatar) {
         avatar.style.backgroundImage = `url('${url}')`;
-        console.log(`[HDO GALLERY] : Avatar chargé -> ID #${id}`);
     } else {
         console.warn("[HDO WARNING] : L'élément HTML '#hope-visual-avatar' est introuvable dans le DOM.");
     }
@@ -96,7 +70,7 @@ window.startIdleGallery = function() {
     changeAvatarImage(`media/alice/${id}-fragment.png`);
     idleInterval = setInterval(() => {
         changeAvatarImage(`media/alice/${id}-fragment.png`);
-    }, 3000);
+    }, 5000);
 };
 
 function stopIdleGallery() {
@@ -303,7 +277,6 @@ function triggerInteractionHop() {
     } else {
         sethopeState("idle");
         userInput.value = "";
-        if (hubGrid) hubGrid.style.display = "none";
         if (radioControls) radioControls.style.display = "auto";
         if (ipcRenderer) ipcRenderer.send('resize-window', { width: 250, height: 250 });
         window.startIdleGallery();
@@ -384,7 +357,7 @@ function planNextPing() {
     const RANDOM_BONUS_MAX = isSignalBoosted ? 3000 : 120000; 
 
     const nextDynamicDelay = BASE_MIN_DELAY + Math.floor(Math.random() * RANDOM_BONUS_MAX);
-    console.log(`[HDO RADIO] : Fréquence calée. Prochain scan dans ${(nextDynamicDelay / 1000).toFixed(1)}s.`);
+    // console.log(`[HDO RADIO] : Fréquence calée. Prochain scan dans ${(nextDynamicDelay / 1000).toFixed(1)}s.`);
     currentPingTimeout = setTimeout(triggerAutonomousPing, nextDynamicDelay);
 }
 
@@ -394,7 +367,6 @@ radioClearBtn.addEventListener('click', () => {
     sethopeState("idle");
     terminal.classList.remove('open');
     if (radioControls) radioControls.style.display = "auto";
-    if (hubGrid) hubGrid.style.display = "none";
     if (ipcRenderer) ipcRenderer.send('resize-window', { width: 250, height: 250 });
     
     lastInteractionTime = Date.now();
@@ -447,55 +419,16 @@ async function processCommand(rawInput) {
 
     lastInteractionTime = Date.now();
     const cleanCmd = command.toLowerCase();
-    
-    const grids = {
-        1: document.getElementById('hdo-hub-grid-1'),
-        2: document.getElementById('hdo-hub-grid-2'),
-        3: document.getElementById('hdo-hub-grid-3'),
-        4: document.getElementById('hdo-hub-grid-4')
-    };
-
-    if (cleanCmd.startsWith('hub') || cleanCmd === 'hub') {
-        sethopeState("thinking");
-        outputText.textContent = "[HDO CLOUD] : Synchronisation des fréquences avec le Sheets maître...";
-        
-        await Promise.all([
-            syncFlowerFromSheets(),
-            chargerOpsCmdDepuisSheets(),
-            chargerOpsStatesDepuisSheets()
-        ]);
-        await syncFlowerFromSheets(); 
-    }
+   
 
     switch(cleanCmd) {
-        case 'hub1': case 'hub2': case 'hub3': case 'hub4':
-            const targetIndex = cleanCmd.replace('hub', '');
-            sethopeState("speaking");
-            outputText.textContent = `[HOPE] : Activation du quadrant tactique ${targetIndex}.`;
-            
-            Object.keys(grids).forEach(key => grids[key].style.display = "none");
-            if (grids[targetIndex]) grids[targetIndex].style.display = "grid";
-            
-            if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 1500 });
-            return;
-
-        case 'hub':
-            sethopeState("speaking");
-            outputText.textContent = "[HOPE] : MATRICE HUB INITIALISÉE. Déploiement global de la structure géométrique.";
-            Object.keys(grids).forEach(key => grids[key].style.display = "grid");
-            if (ipcRenderer) ipcRenderer.send('resize-window', { width: 700, height: 1500 });
-            return;
+   
             
         case 'end':
             sethopeState("panique");
             outputText.textContent = `[HOPE] : Commande "${command}" interdite. Tu ne fais pas deux fois la même erreur, non !? Alors ne lâche pas, elle t'attend quelque part !`;
             return;
-            
-        case 'clear':
-            outputText.textContent = "[HOPE] : Réinitialisation. Fermeture des quadrants.";
-            Object.keys(grids).forEach(key => grids[key].style.display = "none");
-            if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 1500 });
-            return;
+        
     }
 
     if (typeof dictionnaireCommandes !== 'undefined') {
@@ -575,22 +508,6 @@ function processNativeAction(actionName) {
     }
 }
 
-for (let i = 1; i <= 4; i++) {
-    const closeBtn = document.getElementById(`hub-close-btn-${i}`);
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            const grid = document.getElementById(`hdo-hub-grid-${i}`);
-            if (grid) grid.style.display = "none";
-            outputText.textContent = `[HOPE] : Déconnexion du quadrant ${i}.`;
-            
-            const anyOpen = Object.keys([1,2,3,4]).some(k => document.getElementById(`hdo-hub-grid-${parseInt(k)+1}`).style.display === "grid");
-            if (!anyOpen) {
-                sethopeState("idle");
-                if (ipcRenderer) ipcRenderer.send('resize-window', { width: 250, height: 250 });
-            }
-        });
-    }
-}
 
 sendBtn.addEventListener('click', () => {
     processCommand(userInput.value);
@@ -604,14 +521,6 @@ userInput.addEventListener('keypress', (e) => {
     }
 });
 
-if (hubCloseBtn) {
-    hubCloseBtn.addEventListener('click', () => {
-        if (hubGrid) hubGrid.style.display = "none";
-        outputText.textContent = "[HOPE] : HUB déconnecté. Retour en veille.";
-        sethopeState("idle");
-        if (ipcRenderer) ipcRenderer.send('resize-window', { width: 250, height: 250 });
-    });
-}
 
 if (hubInventory) {
     hubInventory.addEventListener('click', () => {

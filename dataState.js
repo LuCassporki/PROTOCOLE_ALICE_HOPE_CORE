@@ -35,7 +35,7 @@ function parseCSVToEtats(csvText) {
         const indiceImage = col.findIndex(c => c.includes('.png') || c.includes('.jpg'));
         
         resultat.push({
-            name: col[0]?.toLowerCase(),
+            name: col[0]?.toLowerCase(),  
             ringColor: col[1],
             auraColor: col[2],
             pulseSpeed: col[3],

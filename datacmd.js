@@ -4,7 +4,7 @@ let dictionnaireCommandes = [];
 
 async function chargerOpsCmdDepuisSheets() {
     try {
-        const response = await fetch(SHEET_CMD_URL);
+        const response = await fetch(SHEET_CMD_URL);  
         const text = await response.text();
         
         // Si tu as exporté en CSV (séparé par des virgules) :
