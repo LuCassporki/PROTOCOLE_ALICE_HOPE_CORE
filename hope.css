@@ -35,14 +35,10 @@ body {
       /* Permet à la vitre Electron de mesurer le HTML réel */
 
 }
-body, .hud-matrix-layer {
+body,*, .hud-matrix-layer,.hope-bubble-container {
     -webkit-app-region: drag;
 }
-/* .hope-bubble-container, button, input, textarea, .dashboard-tactique {
-    -webkit-app-region: no-drag;
-}
-*/
-.hope-bubble-container, button, input, textarea, .dashboard-tactique {
+button, input, textarea, .dashboard-tactique {
     -webkit-app-region: no-drag;
 }
 

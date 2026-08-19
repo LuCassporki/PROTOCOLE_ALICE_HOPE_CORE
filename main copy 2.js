@@ -6,14 +6,13 @@ let win; // On déclare la variable globale pour la fenêtre unique
 function createHopWindow() {
     // On récupère la taille de l'écran principal de l'utilisateur
     const primaryDisplay = screen.getPrimaryDisplay();
-    const { width } = primaryDisplay.workAreaSize;
+    const { width, height } = primaryDisplay.workAreaSize;
     
     win = new BrowserWindow({
-        width: 200,              // Taille par défaut (évite le "auto" qui fait crasher Electron)
-        height: 200,             // Taille par défaut
-        // CALCUL DE LA POSITION : (Largeur Écran / 2) - (Largeur Fenêtre / 2) pour centrer pile au milieu
-        x: Math.floor((width / 2) - (100 / 2)), 
-        y: 100,                  // Une valeur numérique propre (évite le "50%" qui glitch sur Electron)
+        width: 250,                    // Taille initiale correspondant au mode veille défini dans hope.js
+        height: 250,                   
+        x: Math.floor((width / 2) - (250 / 2)), 
+        y: Math.floor((height / 2) - (250 / 2)), // Centrage vertical initial plus propre
         frame: false,
         transparent: true,
         alwaysOnTop: true,
@@ -25,25 +24,24 @@ function createHopWindow() {
         }
     });
 
+    // Force le centrage absolu de la fenêtre par l'OS au spawn pour éviter tout décalage visuel
+    win.center();
+
     // =======================================================================
     // LE FILTRE FANTÔME (Ignorer le vide, capturer les éléments cliquables)
     // =======================================================================
-    
-    //    event.target.id === 'hope-grid-anchor';
-    // event.target.id === 'hope-bubble';
-
     win.webContents.on('dom-ready', () => { 
         win.webContents.executeJavaScript(`
             window.addEventListener('mousemove', (event) => {
                 // On vérifie si la souris survole du vide ou le fond du body
                 const isOverVoid = event.target === document.documentElement || 
-                                   event.target === document.body || 
+                                   event.target === document.body;
                 
                 if (isOverVoid) {
                     // La souris passe À TRAVERS la fenêtre
                     window.electronAPI_setIgnore(true);
                 } else {
-                    // La souris CAPTURE les clics sur les boutons/inputs
+                    // La souris CAPTURE les clics sur la bulle et les éléments interactifs
                     window.electronAPI_setIgnore(false);
                 }
             });
@@ -85,6 +83,10 @@ ipcMain.on('resize-window', (event, { width, height }) => {
         win.setPosition(currentX, currentY);
     }
 });
+
+// =======================================================================
+// ÉCOUTEUR IPC POUR LE DÉPLACEMENT GLOBAL DE LA FÉNETRE (DRAG GLOBAL)
+// =======================================================================
 ipcMain.on('move-window', (event, { deltaX, deltaY }) => {
     if (win) {
         const [currentX, currentY] = win.getPosition();
