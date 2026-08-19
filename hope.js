@@ -273,12 +273,12 @@ function triggerInteractionHop() {
     if (isOpen) {
         sethopeState("listening");
         outputText.textContent = "[HOPE] : Écoute active en ligne. J'analyse tes requêtes, MAJOR.";
-        if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 350 });
+        if (ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 350 });
     } else {
         sethopeState("idle");
         userInput.value = "";
         if (radioControls) radioControls.style.display = "auto";
-        if (ipcRenderer) ipcRenderer.send('resize-window', { width: 250, height: 250 });
+        if (ipcRenderer) ipcRenderer.send('resize-window', { width: 200, height: 200 });
         window.startIdleGallery();
     }
 }
@@ -336,7 +336,7 @@ function triggerAutonomousPing() {
     terminal.classList.add('open');
     
     if (radioControls) radioControls.style.display = "flex";
-    if (ipcRenderer) ipcRenderer.send('resize-window', { width: 350, height: 350 });
+    if (ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 350 });
 
     let avaliableQuotes = autonomousQuotes;
     if (isSignalBoosted) {
