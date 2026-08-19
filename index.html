@@ -82,38 +82,7 @@
         <script src="datacmd.js"></script>
         <script src="dataState.js"></script>
     <script src="database.js"></script>
-    <script>
-        // --- BUFFER DE COMMANDE AU CLAVIER (Déclencheur "hop") ---
-let keyBuffer = "";
-const TARGET_KEYWORD = "hope";
-
-window.addEventListener('keydown', (e) => {
-    // On ignore si l'utilisateur est déjà en train d'écrire dans un input ou textarea du terminal
-    if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
-        return;
-    }
-
-    // On récupère la touche tapée (en minuscule)
-    const char = e.key.toLowerCase();
-    
-    // Si c'est une lettre ou un chiffre valide
-    if (char.length === 1) {
-        keyBuffer += char;
-        
-        // On garde uniquement les derniers caractères (longueur maximale du mot-clé)
-        if (keyBuffer.length > TARGET_KEYWORD.length) {
-            keyBuffer = keyBuffer.slice(-TARGET_KEYWORD.length);
-        }
-
-        // Si le mot-clé secret est complété !
-        if (keyBuffer === TARGET_KEYWORD) {
-            console.log("[HDO TRIGGER] Mot-clé 'hop' détecté au clavier !");
-            triggerInteractionHop(); // Appel direct de ta fonction d'ouverture/fermeture
-            keyBuffer = ""; // On réinitialise le buffer
-        }
-    }
-});
-    </script>
+   
 
 </html>
 
