@@ -32,6 +32,12 @@ body {
       /* Permet à la vitre Electron de mesurer le HTML réel */
 
 }
+body, .hud-matrix-layer {
+    -webkit-app-region: drag;
+}
+.hope-bubble-container, button, input, textarea, .dashboard-tactique {
+    -webkit-app-region: no-drag;
+}
 
 /* Ordonnancement rectiligne : les modules s'empilent proprement vers le bas */
 #hope-grid-anchor, #hope-terminal {
@@ -44,6 +50,7 @@ body {
 #hope-bubble {
     z-index: 9999 !important;
     cursor: pointer;
+-webkit-app-region: drag; /* Transforme la bulle en poignée pour déplacer la fenêtre de l'OS */
 }
 
 .hope-bubble-container {
