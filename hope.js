@@ -50,38 +50,60 @@ const idleImages = [
     'media/alice/22-fragment.jpg'
 ];
 
-const stateImages = {
-    listening: 'media/hope/listening-hope.png',
-    thinking: 'media/hope/thinking-hope.png',
-    speaking: 'media/hope/speaking-hope.png',
-    panique: 'media/hope/panique-hope.png' 
-};
+
 
 let idleInterval = null;
 let currentIdleIndex = 1;
 
+// function changeAvatarImage(url) {
+//     const avatar = document.getElementById('hope-visual-avatar');
+//     if (avatar) {
+//         avatar.style.backgroundImage = `url('${url}')`;
+//     } else {
+//         console.warn("[HDO SYSTEM] : L'élément HTML '#hope-visual-avatar' est introuvable dans le DOM.");
+//     }
+// }
+
+// // Force la fonction à être visible partout dans l'application
+// window.startIdleGallery = function() {
+//     if (idleInterval) return; 
+//     changeAvatarImage(idleImages[currentIdleIndex]);
+//     idleInterval = setInterval(() => {
+//         currentIdleIndex = (currentIdleIndex + 1) % idleImages.length;
+//         changeAvatarImage(idleImages[currentIdleIndex]);
+//     }, 30000);
+// };
+
+// function stopIdleGallery() {
+//     clearInterval(idleInterval);
+//     idleInterval = null;
+// }
+
 function changeAvatarImage(url) {
     const avatar = document.getElementById('hope-visual-avatar');
+    id = Math.floor(Math.random() * 110) + 1;
     if (avatar) {
         avatar.style.backgroundImage = `url('${url}')`;
+        console.log(`[HDO GALLERY] : Avatar chargé -> ID #${id}`);
     } else {
-        console.warn("[HDO SYSTEM] : L'élément HTML '#hope-visual-avatar' est introuvable dans le DOM.");
+        console.warn("[HDO WARNING] : L'élément HTML '#hope-visual-avatar' est introuvable dans le DOM.");
     }
 }
+let id = 1;
 
-// Force la fonction à être visible partout dans l'application
 window.startIdleGallery = function() {
     if (idleInterval) return; 
-    changeAvatarImage(idleImages[currentIdleIndex]);
+    changeAvatarImage(`media/alice/${id}-fragment.png`);
     idleInterval = setInterval(() => {
-        currentIdleIndex = (currentIdleIndex + 1) % idleImages.length;
-        changeAvatarImage(idleImages[currentIdleIndex]);
-    }, 30000);
+        changeAvatarImage(`media/alice/${id}-fragment.png`);
+    }, 3000);
 };
 
 function stopIdleGallery() {
-    clearInterval(idleInterval);
-    idleInterval = null;
+    if (idleInterval) {
+        clearInterval(idleInterval);
+        idleInterval = null;
+    }
 }
 
 // Check si environnement Electron existant

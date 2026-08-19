@@ -19,7 +19,9 @@
 }
 
 body {
-    background-color: transparent !important; /* Impératif pour l'effet hologramme */
+    /* Impératif pour l'effet hologramme */
+    /* background-color: transparent !important; */
+    background-color: black;
     width: auto;                              /* Calque automatique sur le contenu */
     height: auto;                             /* Évite l'occupation totale de l'écran */
     font-family: 'Segoe UI', Arial, sans-serif;
