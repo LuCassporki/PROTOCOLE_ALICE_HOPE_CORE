@@ -28,7 +28,10 @@ body {
     font-family: 'Segoe UI', Arial, sans-serif;
     overflow: hidden;                         /* Masque les scrollbars Windows affreuses */
     display: inline-block;   
-    place-items: center;           
+    place-items: center;    
+    width: 350px;
+    min-height: 200px;       
+    max-height: 500px;       
       /* Permet à la vitre Electron de mesurer le HTML réel */
 
 }

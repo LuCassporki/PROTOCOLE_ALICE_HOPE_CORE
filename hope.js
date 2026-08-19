@@ -1,7 +1,6 @@
 // =======================================================================
 // DOM ANCHORS & CORE VARIABLES
 // ======================================================================= 
-const anchor = document.getElementById('hope-grid-anchor');
 const essence = document.getElementById('hope-essence');
 const bubble = document.getElementById('hope-bubble');
 const terminal = document.getElementById('hope-terminal');
@@ -17,7 +16,6 @@ const radioBoostBtn = document.getElementById('radio-boost-btn');
 const radioVocalBtn = document.getElementById('radio-vocal-btn');
 
 // Éléments du HUB Tactique
-const hubInventory = document.getElementById('hub-inventory');
 
 // Variables d'état fondamentales
 let lastInteractionTime = Date.now();
@@ -287,7 +285,7 @@ function triggerInteractionHop() {
     if (isOpen) {
         sethopeState("listening");
         outputText.textContent = "[HOPE] : Écoute active en ligne. J'analyse tes requêtes, MAJOR.";
-        if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 500, height: 350 });
+        if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 300, height: 500 });
     } else {
         sethopeState("idle");
         userInput.value = "";
@@ -346,7 +344,7 @@ function triggerAutonomousPing() {
     terminal.classList.add('open');
     
     if (radioControls) radioControls.style.display = "flex";
-    if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 500, height: 350 });
+    if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 300, height: 500 });
 
     let avaliableQuotes = autonomousQuotes;
     if (isSignalBoosted) {
@@ -376,7 +374,7 @@ radioClearBtn.addEventListener('click', () => {
     sethopeState("idle");
     terminal.classList.remove('open');
     if (radioControls) radioControls.style.display = "flex";
-    if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 250, height: 250 });
+    if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 300, height: 500 });
     
     lastInteractionTime = Date.now();
     planNextPing();
@@ -523,11 +521,6 @@ userInput.addEventListener('keypress', (e) => {
     }
 });
 
-if (hubInventory) {
-    hubInventory.addEventListener('click', () => {
-        outputText.textContent = "[MAJOR] : Inventaire tactique indisponible. Redirection via le lien d'ancrage.";
-    });
-}
 
 function syncWindowSizeToContent() {
     if (!isElectron) {
