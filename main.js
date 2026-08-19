@@ -12,7 +12,7 @@ function createHopWindow() {
         width: 300,              // Taille par défaut (évite le "auto" qui fait crasher Electron)
         height: 300,             // Taille par défaut
         // CALCUL DE LA POSITION : (Largeur Écran / 2) - (Largeur Fenêtre / 2) pour centrer pile au milieu
-        x: Math.floor((width / 2) - (250 / 2)), 
+        x: Math.floor((width / 2) - (300 / 2)), 
         y: 100,                  // Une valeur numérique propre (évite le "50%" qui glitch sur Electron)
         frame: false,
         transparent: true,
