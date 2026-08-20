@@ -272,7 +272,7 @@ function triggerInteractionHop() {
     if (isOpen) {
         sethopeState("listening");
         outputText.textContent = "[HOPE] : Écoute active en ligne. J'analyse tes requêtes, MAJOR.";
-        if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 500 });
+        if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 550 });
     } else {
         sethopeState("idle");
         userInput.value = "";
@@ -331,7 +331,7 @@ function triggerAutonomousPing() {
     terminal.classList.add('open');
     
     if (radioControls) radioControls.style.display = "flex";
-    if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 500 });
+    if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 550 });
 
     let avaliableQuotes = autonomousQuotes;
     if (isSignalBoosted) {
@@ -361,7 +361,7 @@ radioClearBtn.addEventListener('click', () => {
     sethopeState("idle");
     terminal.classList.remove('open');
     if (radioControls) radioControls.style.display = "flex";
-    if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 500 });
+    if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 550 });
     
     lastInteractionTime = Date.now();
     planNextPing();
