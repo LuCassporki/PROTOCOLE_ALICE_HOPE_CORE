@@ -64,6 +64,12 @@ function stopIdleGallery() {
 // Check si environnement Electron existant
 const isElectron = typeof window !== 'undefined' && typeof window.process !== 'undefined' && window.process.versions && window.process.versions.electron && typeof require !== 'undefined';
 const ipcRenderer = isElectron ? require('electron').ipcRenderer : null;
+if (isElectron) {
+    window.addEventListener('DOMContentLoaded', () => {
+        document.body.style.backgroundColor = 'transparent';
+        document.documentElement.style.backgroundColor = 'transparent';
+    });
+}
 
 // Exposer la fonction de transparence au niveau global de la fenêtre
 window.electronAPI_setIgnore = (ignore) => {
@@ -266,7 +272,7 @@ function triggerInteractionHop() {
     if (isOpen) {
         sethopeState("listening");
         outputText.textContent = "[HOPE] : Écoute active en ligne. J'analyse tes requêtes, MAJOR.";
-        if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 300, height: 500 });
+        if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 500 });
     } else {
         sethopeState("idle");
         userInput.value = "";
@@ -325,7 +331,7 @@ function triggerAutonomousPing() {
     terminal.classList.add('open');
     
     if (radioControls) radioControls.style.display = "flex";
-    if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 300, height: 500 });
+    if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 500 });
 
     let avaliableQuotes = autonomousQuotes;
     if (isSignalBoosted) {
@@ -355,7 +361,7 @@ radioClearBtn.addEventListener('click', () => {
     sethopeState("idle");
     terminal.classList.remove('open');
     if (radioControls) radioControls.style.display = "flex";
-    if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 300, height: 500 });
+    if (isElectron && ipcRenderer) ipcRenderer.send('resize-window', { width: 400, height: 500 });
     
     lastInteractionTime = Date.now();
     planNextPing();
