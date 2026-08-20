@@ -7,7 +7,7 @@
     -webkit-tap-highlight-color: transparent;
 }
 /* test */
-.encre{width: 250px; height: 250px;
+.encre{width: 200px; height: 200px;
     border: solid  rgba(255, 255, 255, 0.2) .1px;
     border-radius: 50% 50%;
     /* background: transparent; */
@@ -21,8 +21,8 @@
 }
 .hope-glass-background {
     position: absolute;
-    width: 300px;
-    height: 300px;
+    width: 250px;
+    height: 250px;
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.01); /* Fond sombre semi-transparent */
     backdrop-filter: blur(1px);    /* Effet de flou "verre dépoli" */
