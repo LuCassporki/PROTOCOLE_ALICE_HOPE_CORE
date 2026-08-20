@@ -6,11 +6,11 @@ let win; // Fenêtre unique globale
 function createHopWindow() {
     const primaryDisplay = screen.getPrimaryDisplay();
     const { width } = primaryDisplay.workAreaSize;
-    
+    const windowSize = 300;
     win = new BrowserWindow({
-        width: 400,
-        height: 250,
-        x: Math.floor((width / 2) - (200 / 2)),
+       width: windowSize,
+        height: windowSize,
+        x: Math.floor((width / 2) - (windowSize / 2)),
         y: 100,
         frame: false,
         transparent: true,

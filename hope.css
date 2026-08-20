@@ -31,7 +31,8 @@
       -webkit-app-region: no-drag !important;
 }
 
-body {padding: 50px;
+body {
+    /* padding: 50px; */
     /* Impératif pour l'effet hologramme */
     /* background-color: transparent !important; */
     background-color: black;
