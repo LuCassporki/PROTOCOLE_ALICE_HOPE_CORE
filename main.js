@@ -8,8 +8,8 @@ function createHopWindow() {
     const { width } = primaryDisplay.workAreaSize;
     const windowSize = 300;
     win = new BrowserWindow({
-       width: windowSize,
-        height: windowSize,
+       width: windowSize + 50,
+        height: windowSize + 50,
         x: Math.floor((width / 2) - (windowSize / 2)),
         y: 100,
         frame: false,
