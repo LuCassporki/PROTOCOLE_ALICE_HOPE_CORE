@@ -348,8 +348,8 @@ function triggerAutonomousPing() {
 }
 
 function planNextPing() {
-    const BASE_MIN_DELAY = isSignalBoosted ? 2000 : 60000; 
-    const RANDOM_BONUS_MAX = isSignalBoosted ? 3000 : 120000; 
+    const BASE_MIN_DELAY = isSignalBoosted ? 30000 : 1800000; 
+    const RANDOM_BONUS_MAX = isSignalBoosted ? 60000 : 7200000; 
 
     const nextDynamicDelay = BASE_MIN_DELAY + Math.floor(Math.random() * RANDOM_BONUS_MAX);
     currentPingTimeout = setTimeout(triggerAutonomousPing, nextDynamicDelay);
